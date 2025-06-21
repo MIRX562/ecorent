@@ -1,4 +1,4 @@
-export interface ItemType {
+export type ItemType = {
   id: number;
   title: string;
   description: string;
@@ -7,13 +7,15 @@ export interface ItemType {
   image: string;
   category: string;
   location: string;
+  lat: number;
+  lng: number;
   distance: number;
   rating: number;
   reviews: number;
-  saved: boolean;
   owner: {
     name: string;
     avatar: string;
     rating: number;
   };
-}
+  saved: boolean;
+};
