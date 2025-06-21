@@ -40,7 +40,6 @@ export default function MarketplaceOptions() {
     maxDistance,
     setMaxDistance,
     ratings,
-    setRatings,
   } = useItemStore();
 
   return (

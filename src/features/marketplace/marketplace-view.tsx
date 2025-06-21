@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Search, MapPin, Star, Heart, Map } from "lucide-react";
+import { Search, MapPin, Star, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
@@ -15,6 +15,7 @@ import { useItemStore } from "./store/marketplace-store";
 import MarketplaceHeader from "./marketplace-header";
 import MarketplaceOptions from "./marketplace-options";
 import MarketplaceCategories from "./marketplace-categories";
+import MarketplaceMap from "./marketplace-map";
 
 const PIXABAY_API_KEY = "50978905-d1ce30881d322635459928df1";
 
@@ -34,12 +35,6 @@ export default function MarketplaceView() {
     isLoading,
     setIsLoading,
     getFilteredItems,
-    priceRange,
-    setPriceRange,
-    maxDistance,
-    setMaxDistance,
-    ratings,
-    setRatings,
   } = useItemStore();
 
   const loaderRef = useRef<HTMLDivElement>(null);
@@ -271,27 +266,7 @@ export default function MarketplaceView() {
             )}
           </div>
 
-          <div className={viewMode === "map" ? "block" : "hidden"}>
-            <div className="relative h-[600px] w-full rounded-lg border overflow-hidden">
-              <div className="absolute inset-0 bg-muted flex items-center justify-center">
-                <div className="text-center">
-                  <Map className="h-12 w-12 mx-auto text-muted-foreground mb-2" />
-                  <h3 className="text-lg font-medium">Map View</h3>
-                  <p className="text-sm text-muted-foreground max-w-md mx-auto mt-1">
-                    Map view would display the items on an interactive map
-                    showing their locations.
-                  </p>
-                </div>
-              </div>
-              <Image
-                src="/placeholder.svg?height=600&width=1200"
-                alt="Map view"
-                width={1200}
-                height={600}
-                className="h-full w-full object-cover opacity-0"
-              />
-            </div>
-          </div>
+          <MarketplaceMap />
         </div>
 
         {visibleItems < filteredItems.length && (
