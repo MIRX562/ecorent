@@ -31,7 +31,17 @@ import {
 import { useItemStore } from "./store/marketplace-store";
 
 export default function MarketplaceOptions() {
-  const { viewMode, setViewMode, getFilteredItems } = useItemStore();
+  const {
+    viewMode,
+    setViewMode,
+    getFilteredItems,
+    priceRange,
+    setPriceRange,
+    maxDistance,
+    setMaxDistance,
+    ratings,
+    setRatings,
+  } = useItemStore();
 
   return (
     <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-6">
@@ -56,7 +66,12 @@ export default function MarketplaceOptions() {
               <div className="space-y-3">
                 <h3 className="text-sm font-medium">Price Range</h3>
                 <div className="space-y-3">
-                  <Slider defaultValue={[0, 100]} max={100} step={1} />
+                  <Slider
+                    value={priceRange}
+                    onValueChange={setPriceRange}
+                    max={100}
+                    step={1}
+                  />
                   <div className="flex items-center justify-between">
                     <span className="text-sm">$0</span>
                     <span className="text-sm">$100+</span>
@@ -66,7 +81,13 @@ export default function MarketplaceOptions() {
               <div className="space-y-3">
                 <h3 className="text-sm font-medium">Distance</h3>
                 <div className="space-y-3">
-                  <Slider defaultValue={[10]} max={50} step={1} />
+                  <Slider
+                    value={[maxDistance]}
+                    onValueChange={(v) => setMaxDistance(v[0])}
+                    max={50}
+                    step={1}
+                  />
+
                   <div className="flex items-center justify-between">
                     <span className="text-sm">Within 10 miles</span>
                   </div>
@@ -90,7 +111,17 @@ export default function MarketplaceOptions() {
                 <div className="space-y-2">
                   {[4, 3, 2, 1].map((rating) => (
                     <div key={rating} className="flex items-center space-x-2">
-                      <Checkbox id={`rating-${rating}`} />
+                      <Checkbox
+                        checked={ratings.includes(rating)}
+                        onCheckedChange={(checked) => {
+                          const prev = useItemStore.getState().ratings;
+                          useItemStore.setState({
+                            ratings: checked
+                              ? [...prev, rating]
+                              : prev.filter((r) => r !== rating),
+                          });
+                        }}
+                      />
                       <Label
                         htmlFor={`rating-${rating}`}
                         className="flex items-center"

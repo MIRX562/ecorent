@@ -339,7 +339,7 @@ export const items = [
   },
   {
     id: 18,
-    title: "Folding Tables & Chairs",
+    title: "Folding Tables",
     description: "Set of 2 tables and 12 chairs for events and parties",
     price: 45,
     priceUnit: "day",

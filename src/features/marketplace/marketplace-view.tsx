@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Search, MapPin, Star, Heart, Map } from "lucide-react";
@@ -15,6 +15,8 @@ import { useItemStore } from "./store/marketplace-store";
 import MarketplaceHeader from "./marketplace-header";
 import MarketplaceOptions from "./marketplace-options";
 import MarketplaceCategories from "./marketplace-categories";
+
+const PIXABAY_API_KEY = "50978905-d1ce30881d322635459928df1";
 
 export default function MarketplaceView() {
   const searchParams = useSearchParams();
@@ -32,11 +34,22 @@ export default function MarketplaceView() {
     isLoading,
     setIsLoading,
     getFilteredItems,
+    priceRange,
+    setPriceRange,
+    maxDistance,
+    setMaxDistance,
+    ratings,
+    setRatings,
   } = useItemStore();
 
   const loaderRef = useRef<HTMLDivElement>(null);
 
   const filteredItems = getFilteredItems(items);
+
+  // Pixabay image cache state
+  const [pixabayImages, setPixabayImages] = useState<Record<number, string>>(
+    {}
+  );
 
   useEffect(() => {
     setSearchQuery(searchParams.get("search") || "");
@@ -82,10 +95,45 @@ export default function MarketplaceView() {
     };
   }, [loaderRef, isLoading, visibleItems, items, searchQuery, activeCategory]);
 
+  useEffect(() => {
+    // Fetch images for visible items only if not already cached
+    const fetchImages = async () => {
+      const promises = filteredItems
+        .slice(0, visibleItems)
+        .map(async (item) => {
+          if (!pixabayImages[item.id]) {
+            try {
+              const res = await fetch(
+                `https://pixabay.com/api/?key=${PIXABAY_API_KEY}&q=${encodeURIComponent(
+                  item.title
+                )}&image_type=photo&per_page=3`
+              );
+              const data = await res.json();
+              if (data.hits && data.hits.length > 0) {
+                return { id: item.id, url: data.hits[0].webformatURL };
+              }
+            } catch {}
+          }
+          return null;
+        });
+      const results = await Promise.all(promises);
+      const newImages: Record<number, string> = {};
+      results.forEach((result) => {
+        if (result) newImages[result.id] = result.url;
+      });
+      if (Object.keys(newImages).length > 0) {
+        setPixabayImages((prev) => ({ ...prev, ...newImages }));
+      }
+    };
+    fetchImages();
+    // Only run when filteredItems or visibleItems changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filteredItems, visibleItems]);
+
   return (
     <div className="min-h-screen bg-muted/30">
       <MarketplaceHeader />
-      <main className="container py-6 mx-auto">
+      <main className="container py-6 px-2 mx-auto">
         <MarketplaceOptions />
         <MarketplaceCategories />
 
@@ -115,14 +163,17 @@ export default function MarketplaceView() {
             ) : (
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {filteredItems.slice(0, visibleItems).map((item) => (
-                  <Card key={item.id} className="overflow-hidden group">
+                  <Card
+                    key={item.id}
+                    className="overflow-hidden group flex flex-col justify-between"
+                  >
                     <div className="relative">
                       <Link
                         href={`/marketplace/${item.id}`}
                         className="cursor-pointer"
                       >
                         <Image
-                          src={item.image || "/placeholder.svg"}
+                          src={pixabayImages[item.id]}
                           alt={item.title}
                           width={400}
                           height={300}
@@ -186,7 +237,7 @@ export default function MarketplaceView() {
                           </div>
                         </div>
                       </CardContent>
-                      <CardFooter className="p-4 pt-0 flex items-center justify-between">
+                      <CardFooter className="p-4 py-0 flex items-center justify-between">
                         <div className="flex items-center gap-2">
                           <Avatar className="h-6 w-6">
                             <AvatarImage

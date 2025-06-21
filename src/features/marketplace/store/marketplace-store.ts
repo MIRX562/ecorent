@@ -64,16 +64,43 @@ export const useItemStore = create<ItemStore>((set, get) => ({
 
   isLoading: false,
   setIsLoading: (v) => set({ isLoading: v }),
-
   getFilteredItems: (allItems: ItemType[]) => {
-    const { searchQuery, activeCategory } = get();
+    const {
+      searchQuery,
+      activeCategory,
+      priceRange,
+      maxDistance,
+      ratings,
+      // conditions,
+    } = get();
+
     return allItems.filter((item) => {
       const matchSearch =
         item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.description.toLowerCase().includes(searchQuery.toLowerCase());
+
       const matchCategory =
         activeCategory === "all" || item.category === activeCategory;
-      return matchSearch && matchCategory;
+
+      const matchPrice =
+        item.price >= priceRange[0] && item.price <= priceRange[1];
+
+      const matchDistance = item.distance <= maxDistance;
+
+      const matchRating =
+        ratings.length === 0 || ratings.some((r) => item.rating >= r);
+
+      // const matchCondition =
+      //   conditions.length === 0 || conditions.includes(item.condition); // assumes item.condition exists
+
+      return (
+        matchSearch &&
+        matchCategory &&
+        matchPrice &&
+        matchDistance &&
+        matchRating
+        // matchCondition
+      );
     });
   },
 
