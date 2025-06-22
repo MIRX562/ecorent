@@ -39,7 +39,6 @@ import {
 } from "@/components/ui/accordion";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
-// Sample item data (in a real app, this would be fetched based on the ID)
 const itemData = {
   id: 1,
   title: "Mountain Bike",
@@ -148,9 +147,6 @@ const itemData = {
     },
   ],
 };
-
-const PIXABAY_API_KEY =
-  process.env.NEXT_PUBLIC_PIXABAY_API_KEY || "YOUR_PIXABAY_API_KEY";
 
 export default function ItemDetailView() {
   const params = useParams();

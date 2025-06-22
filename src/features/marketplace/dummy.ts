@@ -1,4 +1,3 @@
-// Sample categories
 export const categories = [
   { id: "all", name: "All Categories" },
   { id: "outdoor", name: "Outdoor Gear", icon: "🏕️" },
@@ -11,7 +10,6 @@ export const categories = [
   { id: "home", name: "Home & Garden", icon: "🏡" },
 ];
 
-// Sample items data
 export const items = [
   {
     id: 1,
