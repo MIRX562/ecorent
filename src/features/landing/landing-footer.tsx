@@ -15,12 +15,13 @@ export default function Footer() {
               </span>
             </div>
             <p className="text-sm text-muted-foreground">
-              Rent what you need. Share what you don&apos;t. Join the circular
-              economy and help build a more sustainable future.
+              Sewa yang kamu butuhkan. Sewakan yang tidak kamu pakai.
+              Bergabunglah dengan ekonomi sirkular dan bantu wujudkan masa depan
+              yang lebih berkelanjutan.
             </p>
           </div>
           <div className="grid flex-1 grid-cols-2 gap-6 sm:grid-cols-4">
-            <div className="flex flex-col gap-3">
+            {/* <div className="flex flex-col gap-3">
               <h3 className="text-sm font-medium">Product</h3>
               <ul className="flex flex-col gap-2">
                 <li>
@@ -56,8 +57,8 @@ export default function Footer() {
                   </Link>
                 </li>
               </ul>
-            </div>
-            <div className="flex flex-col gap-3">
+            </div> */}
+            {/* <div className="flex flex-col gap-3">
               <h3 className="text-sm font-medium">Company</h3>
               <ul className="flex flex-col gap-2">
                 <li>
@@ -93,8 +94,8 @@ export default function Footer() {
                   </Link>
                 </li>
               </ul>
-            </div>
-            <div className="flex flex-col gap-3">
+            </div> */}
+            {/* <div className="flex flex-col gap-3">
               <h3 className="text-sm font-medium">Resources</h3>
               <ul className="flex flex-col gap-2">
                 <li>
@@ -130,8 +131,8 @@ export default function Footer() {
                   </Link>
                 </li>
               </ul>
-            </div>
-            <div className="flex flex-col gap-3">
+            </div> */}
+            {/* <div className="flex flex-col gap-3">
               <h3 className="text-sm font-medium">Legal</h3>
               <ul className="flex flex-col gap-2">
                 <li>
@@ -167,7 +168,7 @@ export default function Footer() {
                   </Link>
                 </li>
               </ul>
-            </div>
+            </div> */}
           </div>
         </div>
         <div className="flex flex-col gap-4 sm:flex-row items-center justify-between">

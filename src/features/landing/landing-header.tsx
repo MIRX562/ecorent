@@ -21,19 +21,19 @@ export default function Header() {
             href="#features"
             className="text-sm font-medium hover:text-teal-500 transition-colors"
           >
-            Features
+            Fitur
           </SmoothScrollLink>
           <SmoothScrollLink
             href="#how-it-works"
             className="text-sm font-medium hover:text-teal-500 transition-colors"
           >
-            How It Works
+            Cara Kerja
           </SmoothScrollLink>
           <SmoothScrollLink
             href="#testimonials"
             className="text-sm font-medium hover:text-teal-500 transition-colors"
           >
-            Testimonials
+            Testimoni
           </SmoothScrollLink>
           <SmoothScrollLink
             href="#faq"
@@ -48,12 +48,12 @@ export default function Header() {
             href="/auth/login"
             className="hidden md:block text-sm font-medium hover:text-teal-500 transition-colors"
           >
-            Log in
+            Masuk
           </Link>
 
           <Link href="/auth/register">
             <Button className="hidden md:inline-flex bg-gradient-to-r from-teal-500 to-cyan-600 hover:from-teal-600 hover:to-cyan-700">
-              Sign up
+              Daftar
             </Button>
           </Link>
           <Button variant="ghost" size="icon" className="md:hidden">

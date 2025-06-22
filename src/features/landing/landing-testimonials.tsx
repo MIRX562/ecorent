@@ -7,18 +7,18 @@ export default function TestimonialsSection() {
       id="testimonials"
       className="py-12 md:py-24 lg:py-32 bg-white dark:bg-background"
     >
-      <div className="container px-4 md:px-6">
+      <div className="container px-4 md:px-6 mx-auto">
         <div className="flex flex-col items-center justify-center space-y-4 text-center">
           <div className="space-y-2">
             <div className="inline-block rounded-lg bg-teal-100 dark:bg-teal-950/40 px-3 py-1 text-sm text-teal-700 dark:text-teal-300">
-              Testimonials
+              Testimoni
             </div>
             <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">
-              What Our Users Say
+              Kata Pengguna Kami
             </h2>
             <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-              Join thousands of happy users who are already sharing and saving
-              with EcoRent.
+              Bergabunglah dengan ribuan pengguna senang yang sudah berbagi dan
+              berhemat dengan EcoRent.
             </p>
           </div>
         </div>
@@ -33,8 +33,8 @@ export default function TestimonialsSection() {
                 <Star className="h-4 w-4 fill-current" />
               </div>
               <p className="text-muted-foreground">
-                "I made $350 last month renting out my camping gear that was
-                just collecting dust in my garage. Amazing concept!"
+                "Saya menghasilkan $350 bulan lalu dari menyewakan peralatan
+                camping yang cuma nganggur di garasi. Konsep yang luar biasa!"
               </p>
             </div>
             <div className="flex items-center gap-4">
@@ -57,8 +57,9 @@ export default function TestimonialsSection() {
                 <Star className="h-4 w-4 fill-current" />
               </div>
               <p className="text-muted-foreground">
-                "Rented a high-end camera for my vacation instead of buying one.
-                Saved hundreds and got exactly what I needed!"
+                "Menyewa kamera mahal untuk liburan daripada membelinya.
+                Menghemat ratusan dolar dan mendapatkan persis yang saya
+                butuhkan!"
               </p>
             </div>
             <div className="flex items-center gap-4">
@@ -81,8 +82,9 @@ export default function TestimonialsSection() {
                 <Star className="h-4 w-4 fill-current" />
               </div>
               <p className="text-muted-foreground">
-                "As a minimalist, EcoRent helps me access things I need
-                occasionally without owning them. Game changer!"
+                "Sebagai minimalis, EcoRent membantu saya mengakses
+                barang-barang yang sesekali saya butuhkan tanpa harus
+                memilikinya. Benar-benar mengubah segalanya!"
               </p>
             </div>
             <div className="flex items-center gap-4">
