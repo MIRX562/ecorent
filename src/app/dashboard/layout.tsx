@@ -17,6 +17,7 @@ import {
   LogOut,
   Menu,
   User,
+  Clock,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -40,6 +41,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     { name: "Dashboard", href: "/dashboard", icon: Home },
     { name: "My Listings", href: "/dashboard/listings", icon: Package },
     { name: "My Rentals", href: "/dashboard/rentals", icon: ShoppingCart },
+    { name: "Requests", href: "/dashboard/requests", icon: Clock },
     { name: "Messages", href: "/dashboard/messages", icon: MessageSquare },
     { name: "Saved Items", href: "/dashboard/saved", icon: Heart },
     { name: "Notifications", href: "/dashboard/notifications", icon: Bell },

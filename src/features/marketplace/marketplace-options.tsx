@@ -199,21 +199,17 @@ export default function MarketplaceOptions() {
         <div className="border rounded-md p-1">
           <Button
             variant={viewMode === "grid" ? "default" : "ghost"}
-            size="icon"
-            className="h-8 w-8"
             onClick={() => setViewMode("grid")}
           >
             <Grid className="h-4 w-4" />
-            <span className="sr-only">Grid view</span>
+            <span className="">Grid view</span>
           </Button>
           <Button
             variant={viewMode === "map" ? "default" : "ghost"}
-            size="icon"
-            className="h-8 w-8"
             onClick={() => setViewMode("map")}
           >
             <Map className="h-4 w-4" />
-            <span className="sr-only">Map view</span>
+            <span className="">Map view</span>
           </Button>
         </div>
       </div>

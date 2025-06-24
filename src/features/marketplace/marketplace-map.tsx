@@ -241,7 +241,7 @@ export default function MarketplaceMap() {
       >
         <SheetContent
           side="bottom"
-          className="max-h-[90vh] overflow-y-auto p-0"
+          className="max-h-[90vh] overflow-y-auto p-0 rounded-t-2xl"
         >
           {selectedItem && (
             <div className="p-4">
