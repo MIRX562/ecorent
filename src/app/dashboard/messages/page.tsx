@@ -1,43 +1,34 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Send, MoreVertical, Phone, Video, Info } from "lucide-react"
-import { cn } from "@/lib/utils"
-
-interface Message {
-  id: string
-  senderId: string
-  content: string
-  timestamp: Date
-  isRead: boolean
-}
+import { useState } from "react";
+import Link from "next/link";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Search, MessageCircle } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface RentalItem {
-  id: string
-  name: string
-  image: string
-  price: number
-  period: string
-  status: "borrowed" | "listed"
+  id: string;
+  name: string;
+  image: string;
+  price: number;
+  period: string;
+  status: "borrowed" | "listed";
 }
 
 interface Conversation {
-  id: string
+  id: string;
   participant: {
-    id: string
-    name: string
-    avatar: string
-  }
-  item: RentalItem
-  messages: Message[]
-  lastMessage: string
-  lastMessageTime: Date
-  unreadCount: number
+    id: string;
+    name: string;
+    avatar: string;
+    isOnline: boolean;
+  };
+  item: RentalItem;
+  lastMessage: string;
+  lastMessageTime: Date;
+  unreadCount: number;
 }
 
 // Sample data
@@ -48,41 +39,19 @@ const conversations: Conversation[] = [
       id: "user1",
       name: "Sarah Johnson",
       avatar: "/placeholder.svg?height=40&width=40",
+      isOnline: true,
     },
     item: {
       id: "item1",
       name: "Canon EOS R5 Camera",
-      image: "/placeholder.svg?height=80&width=80",
+      image: "/placeholder.svg?height=60&width=60",
       price: 45,
       period: "3 days",
       status: "borrowed",
     },
-    messages: [
-      {
-        id: "msg1",
-        senderId: "user1",
-        content: "Hi! I'm interested in renting your camera for the weekend.",
-        timestamp: new Date(2024, 0, 15, 10, 30),
-        isRead: true,
-      },
-      {
-        id: "msg2",
-        senderId: "currentUser",
-        content: "Great! It's available. When do you need it?",
-        timestamp: new Date(2024, 0, 15, 10, 45),
-        isRead: true,
-      },
-      {
-        id: "msg3",
-        senderId: "user1",
-        content: "This Friday to Sunday would be perfect. Is pickup available?",
-        timestamp: new Date(2024, 0, 15, 11, 15),
-        isRead: false,
-      },
-    ],
     lastMessage: "This Friday to Sunday would be perfect. Is pickup available?",
     lastMessageTime: new Date(2024, 0, 15, 11, 15),
-    unreadCount: 1,
+    unreadCount: 2,
   },
   {
     id: "2",
@@ -90,39 +59,18 @@ const conversations: Conversation[] = [
       id: "user2",
       name: "Mike Chen",
       avatar: "/placeholder.svg?height=40&width=40",
+      isOnline: false,
     },
     item: {
       id: "item2",
       name: "MacBook Pro 16-inch",
-      image: "/placeholder.svg?height=80&width=80",
+      image: "/placeholder.svg?height=60&width=60",
       price: 35,
       period: "1 week",
       status: "listed",
     },
-    messages: [
-      {
-        id: "msg4",
-        senderId: "currentUser",
-        content: "Hi! Is your MacBook still available for rent?",
-        timestamp: new Date(2024, 0, 14, 14, 20),
-        isRead: true,
-      },
-      {
-        id: "msg5",
-        senderId: "user2",
-        content: "Yes, it's available! What do you need it for?",
-        timestamp: new Date(2024, 0, 14, 14, 35),
-        isRead: true,
-      },
-      {
-        id: "msg6",
-        senderId: "currentUser",
-        content: "I need it for a video editing project. How's the battery life?",
-        timestamp: new Date(2024, 0, 14, 15, 10),
-        isRead: true,
-      },
-    ],
-    lastMessage: "I need it for a video editing project. How's the battery life?",
+    lastMessage:
+      "I need it for a video editing project. How's the battery life?",
     lastMessageTime: new Date(2024, 0, 14, 15, 10),
     unreadCount: 0,
   },
@@ -132,238 +80,209 @@ const conversations: Conversation[] = [
       id: "user3",
       name: "Emma Wilson",
       avatar: "/placeholder.svg?height=40&width=40",
+      isOnline: true,
     },
     item: {
       id: "item3",
       name: "DJI Mavic Air 2 Drone",
-      image: "/placeholder.svg?height=80&width=80",
+      image: "/placeholder.svg?height=60&width=60",
       price: 25,
       period: "2 days",
       status: "borrowed",
     },
-    messages: [
-      {
-        id: "msg7",
-        senderId: "user3",
-        content: "Thank you for the drone rental! The footage came out amazing.",
-        timestamp: new Date(2024, 0, 13, 16, 45),
-        isRead: true,
-      },
-      {
-        id: "msg8",
-        senderId: "currentUser",
-        content: "So glad to hear that! Feel free to rent again anytime.",
-        timestamp: new Date(2024, 0, 13, 17, 20),
-        isRead: true,
-      },
-    ],
     lastMessage: "So glad to hear that! Feel free to rent again anytime.",
     lastMessageTime: new Date(2024, 0, 13, 17, 20),
     unreadCount: 0,
   },
-]
+  {
+    id: "4",
+    participant: {
+      id: "user4",
+      name: "Alex Rodriguez",
+      avatar: "/placeholder.svg?height=40&width=40",
+      isOnline: false,
+    },
+    item: {
+      id: "item4",
+      name: "Nintendo Switch Console",
+      image: "/placeholder.svg?height=60&width=60",
+      price: 15,
+      period: "5 days",
+      status: "listed",
+    },
+    lastMessage: "Thanks for the quick response! When can I pick it up?",
+    lastMessageTime: new Date(2024, 0, 12, 9, 30),
+    unreadCount: 1,
+  },
+];
 
 export default function MessagesPage() {
-  const [selectedConversation, setSelectedConversation] = useState<Conversation>(conversations[0])
-  const [newMessage, setNewMessage] = useState("")
+  const [searchQuery, setSearchQuery] = useState("");
 
   const formatTime = (date: Date) => {
-    const now = new Date()
-    const diff = now.getTime() - date.getTime()
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24))
+    const now = new Date();
+    const diff = now.getTime() - date.getTime();
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
 
     if (days === 0) {
-      return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+      return date.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
     } else if (days === 1) {
-      return "Yesterday"
+      return "Yesterday";
     } else if (days < 7) {
-      return date.toLocaleDateString([], { weekday: "short" })
+      return date.toLocaleDateString([], { weekday: "short" });
     } else {
-      return date.toLocaleDateString([], { month: "short", day: "numeric" })
+      return date.toLocaleDateString([], { month: "short", day: "numeric" });
     }
-  }
+  };
 
-  const handleSendMessage = () => {
-    if (!newMessage.trim()) return
+  const filteredConversations = conversations.filter(
+    (conversation) =>
+      conversation.participant.name
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase()) ||
+      conversation.item.name
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase()) ||
+      conversation.lastMessage.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
-    // Here you would typically send the message to your backend
-    console.log("Sending message:", newMessage)
-    setNewMessage("")
-  }
+  const totalUnread = conversations.reduce(
+    (sum, conv) => sum + conv.unreadCount,
+    0
+  );
 
   return (
-    <div className="flex h-[calc(100vh-8rem)] bg-background">
-      {/* Conversations List */}
-      <div className="w-80 border-r bg-card">
-        <div className="p-4 border-b">
-          <h2 className="text-lg font-semibold">Messages</h2>
+    <div className="max-w-4xl mx-auto p-4 space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold">Messages</h1>
+          <p className="text-muted-foreground">
+            {totalUnread > 0
+              ? `${totalUnread} unread messages`
+              : "All caught up!"}
+          </p>
         </div>
-        <div className="overflow-y-auto">
-          {conversations.map((conversation) => (
-            <div
-              key={conversation.id}
-              className={cn(
-                "p-4 border-b cursor-pointer hover:bg-muted/50 transition-colors",
-                selectedConversation.id === conversation.id &&
-                  "bg-teal-50 dark:bg-teal-950/20 border-r-2 border-r-teal-500",
-              )}
-              onClick={() => setSelectedConversation(conversation)}
-            >
-              <div className="flex items-start gap-3">
-                <Avatar className="h-10 w-10">
-                  <AvatarImage
-                    src={conversation.participant.avatar || "/placeholder.svg"}
-                    alt={conversation.participant.name}
-                  />
-                  <AvatarFallback>
-                    {conversation.participant.name
-                      .split(" ")
-                      .map((n) => n[0])
-                      .join("")}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between">
-                    <p className="text-sm font-medium truncate">{conversation.participant.name}</p>
-                    <span className="text-xs text-muted-foreground">{formatTime(conversation.lastMessageTime)}</span>
-                  </div>
-                  <p className="text-xs text-teal-600 dark:text-teal-400 font-medium">{conversation.item.name}</p>
-                  <p className="text-sm text-muted-foreground truncate mt-1">{conversation.lastMessage}</p>
-                </div>
-                {conversation.unreadCount > 0 && (
-                  <Badge className="bg-teal-500 hover:bg-teal-600 text-white text-xs">{conversation.unreadCount}</Badge>
-                )}
-              </div>
-            </div>
-          ))}
+        <div className="flex items-center gap-2">
+          <MessageCircle className="h-5 w-5 text-teal-500" />
+          <span className="text-sm font-medium">
+            {conversations.length} conversations
+          </span>
         </div>
       </div>
 
-      {/* Chat Area */}
-      <div className="flex-1 flex flex-col">
-        {selectedConversation ? (
-          <>
-            {/* Chat Header */}
-            <div className="p-4 border-b bg-card">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <Avatar className="h-10 w-10">
-                    <AvatarImage
-                      src={selectedConversation.participant.avatar || "/placeholder.svg"}
-                      alt={selectedConversation.participant.name}
-                    />
-                    <AvatarFallback>
-                      {selectedConversation.participant.name
-                        .split(" ")
-                        .map((n) => n[0])
-                        .join("")}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <h3 className="font-medium">{selectedConversation.participant.name}</h3>
-                    <p className="text-sm text-muted-foreground">Online</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Button variant="ghost" size="icon">
-                    <Phone className="h-4 w-4" />
-                  </Button>
-                  <Button variant="ghost" size="icon">
-                    <Video className="h-4 w-4" />
-                  </Button>
-                  <Button variant="ghost" size="icon">
-                    <Info className="h-4 w-4" />
-                  </Button>
-                  <Button variant="ghost" size="icon">
-                    <MoreVertical className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-            </div>
+      {/* Search */}
+      <div className="relative">
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <Input
+          placeholder="Search conversations..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="pl-10"
+        />
+      </div>
 
-            {/* Item Context */}
-            <div className="p-4 bg-teal-50 dark:bg-teal-950/20 border-b">
-              <Card>
-                <CardContent className="p-4">
-                  <div className="flex items-center gap-4">
-                    <img
-                      src={selectedConversation.item.image || "/placeholder.svg"}
-                      alt={selectedConversation.item.name}
-                      className="w-16 h-16 rounded-lg object-cover"
-                    />
-                    <div className="flex-1">
-                      <h4 className="font-medium">{selectedConversation.item.name}</h4>
-                      <div className="flex items-center gap-4 mt-1">
-                        <span className="text-lg font-semibold text-teal-600">
-                          ${selectedConversation.item.price}/day
-                        </span>
-                        <Badge variant={selectedConversation.item.status === "borrowed" ? "default" : "secondary"}>
-                          {selectedConversation.item.status === "borrowed" ? "You borrowed this" : "Your listing"}
-                        </Badge>
-                      </div>
-                      <p className="text-sm text-muted-foreground">Rental period: {selectedConversation.item.period}</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4">
-              {selectedConversation.messages.map((message) => (
-                <div
-                  key={message.id}
-                  className={cn("flex", message.senderId === "currentUser" ? "justify-end" : "justify-start")}
-                >
-                  <div
-                    className={cn(
-                      "max-w-xs lg:max-w-md px-4 py-2 rounded-lg",
-                      message.senderId === "currentUser" ? "bg-teal-500 text-white" : "bg-muted",
+      {/* Conversations List */}
+      <div className="space-y-2">
+        {filteredConversations.length === 0 ? (
+          <div className="text-center py-12">
+            <MessageCircle className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+            <h3 className="text-lg font-medium">No conversations found</h3>
+            <p className="text-muted-foreground">
+              {searchQuery
+                ? "Try adjusting your search terms"
+                : "Start renting items to begin conversations"}
+            </p>
+          </div>
+        ) : (
+          filteredConversations.map((conversation) => (
+            <Link
+              key={conversation.id}
+              href={`/dashboard/messages/${conversation.id}`}
+            >
+              <div
+                className={cn(
+                  "p-4 rounded-lg border bg-card hover:bg-muted/50 transition-colors cursor-pointer",
+                  conversation.unreadCount > 0 &&
+                    "border-teal-200 bg-teal-50/50 dark:border-teal-800 dark:bg-teal-950/20"
+                )}
+              >
+                <div className="flex items-start gap-4">
+                  {/* User Avatar */}
+                  <div className="relative">
+                    <Avatar className="h-12 w-12">
+                      <AvatarImage
+                        src={
+                          conversation.participant.avatar || "/placeholder.svg"
+                        }
+                        alt={conversation.participant.name}
+                      />
+                      <AvatarFallback>
+                        {conversation.participant.name
+                          .split(" ")
+                          .map((n) => n[0])
+                          .join("")}
+                      </AvatarFallback>
+                    </Avatar>
+                    {conversation.participant.isOnline && (
+                      <div className="absolute -bottom-1 -right-1 h-4 w-4 bg-green-500 border-2 border-background rounded-full" />
                     )}
-                  >
-                    <p className="text-sm">{message.content}</p>
-                    <p
-                      className={cn(
-                        "text-xs mt-1",
-                        message.senderId === "currentUser" ? "text-teal-100" : "text-muted-foreground",
-                      )}
-                    >
-                      {formatTime(message.timestamp)}
+                  </div>
+
+                  {/* Conversation Content */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-start justify-between mb-2">
+                      <div>
+                        <h3 className="font-medium text-sm">
+                          {conversation.participant.name}
+                        </h3>
+                        <div className="flex items-center gap-2 mt-1">
+                          <img
+                            src={conversation.item.image || "/placeholder.svg"}
+                            alt={conversation.item.name}
+                            className="w-5 h-5 rounded object-cover"
+                          />
+                          <span className="text-xs text-teal-600 dark:text-teal-400 font-medium truncate">
+                            {conversation.item.name}
+                          </span>
+                          <Badge
+                            variant={
+                              conversation.item.status === "borrowed"
+                                ? "default"
+                                : "secondary"
+                            }
+                            className="text-xs"
+                          >
+                            {conversation.item.status === "borrowed"
+                              ? "Borrowed"
+                              : "Listed"}
+                          </Badge>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs text-muted-foreground whitespace-nowrap">
+                          {formatTime(conversation.lastMessageTime)}
+                        </span>
+                        {conversation.unreadCount > 0 && (
+                          <Badge className="bg-teal-500 hover:bg-teal-600 text-white text-xs min-w-[20px] h-5 flex items-center justify-center">
+                            {conversation.unreadCount}
+                          </Badge>
+                        )}
+                      </div>
+                    </div>
+                    <p className="text-sm text-muted-foreground line-clamp-2">
+                      {conversation.lastMessage}
                     </p>
                   </div>
                 </div>
-              ))}
-            </div>
-
-            {/* Message Input */}
-            <div className="p-4 border-t bg-card">
-              <div className="flex items-center gap-2">
-                <Input
-                  placeholder="Type a message..."
-                  value={newMessage}
-                  onChange={(e) => setNewMessage(e.target.value)}
-                  onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
-                  className="flex-1"
-                />
-                <Button
-                  onClick={handleSendMessage}
-                  disabled={!newMessage.trim()}
-                  className="bg-teal-500 hover:bg-teal-600"
-                >
-                  <Send className="h-4 w-4" />
-                </Button>
               </div>
-            </div>
-          </>
-        ) : (
-          <div className="flex-1 flex items-center justify-center">
-            <div className="text-center">
-              <h3 className="text-lg font-medium">Select a conversation</h3>
-              <p className="text-muted-foreground">Choose a conversation from the list to start messaging</p>
-            </div>
-          </div>
+            </Link>
+          ))
         )}
       </div>
     </div>
-  )
+  );
 }
