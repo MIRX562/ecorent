@@ -1,17 +1,29 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Switch } from "@/components/ui/switch"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
-import { Separator } from "@/components/ui/separator"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -22,7 +34,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
+} from "@/components/ui/alert-dialog";
 import {
   User,
   Shield,
@@ -36,13 +48,12 @@ import {
   Trash2,
   Plus,
   Check,
-} from "lucide-react"
-import { useToast } from "@/hooks/use-toast"
+} from "lucide-react";
+import { toast } from "sonner";
 
 export default function SettingsPage() {
-  const [activeTab, setActiveTab] = useState("profile")
-  const [isLoading, setIsLoading] = useState(false)
-  const { toast } = useToast()
+  const [activeTab, setActiveTab] = useState("profile");
+  const [isLoading, setIsLoading] = useState(false);
 
   // Profile state
   const [profile, setProfile] = useState({
@@ -56,7 +67,7 @@ export default function SettingsPage() {
     website: "",
     twitter: "",
     instagram: "",
-  })
+  });
 
   // Account state
   const [account, setAccount] = useState({
@@ -65,7 +76,7 @@ export default function SettingsPage() {
     confirmPassword: "",
     twoFactorEnabled: true,
     emailVerified: true,
-  })
+  });
 
   // Notification preferences
   const [notifications, setNotifications] = useState({
@@ -90,7 +101,7 @@ export default function SettingsPage() {
       reminders: true,
       marketing: false,
     },
-  })
+  });
 
   // Privacy settings
   const [privacy, setPrivacy] = useState({
@@ -99,13 +110,19 @@ export default function SettingsPage() {
     showPhone: false,
     allowSearchEngines: true,
     allowDataSharing: false,
-  })
+  });
 
   // Payment methods
   const [paymentMethods, setPaymentMethods] = useState([
     { id: 1, type: "card", last4: "4242", brand: "Visa", isDefault: true },
-    { id: 2, type: "card", last4: "5555", brand: "Mastercard", isDefault: false },
-  ])
+    {
+      id: 2,
+      type: "card",
+      last4: "5555",
+      brand: "Mastercard",
+      isDefault: false,
+    },
+  ]);
 
   // App preferences
   const [preferences, setPreferences] = useState({
@@ -115,41 +132,44 @@ export default function SettingsPage() {
     autoAcceptRequests: false,
     defaultRentalDuration: "1",
     requireDeposit: true,
-  })
+  });
 
   const handleSave = async (section: string) => {
-    setIsLoading(true)
+    setIsLoading(true);
     // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-    setIsLoading(false)
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    setIsLoading(false);
 
-    toast({
-      title: "Settings saved",
+    toast("Settings saved", {
       description: `Your ${section} settings have been updated successfully.`,
-    })
-  }
+    });
+  };
 
   const handleDeleteAccount = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 2000))
-    setIsLoading(false)
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    setIsLoading(false);
 
-    toast({
-      title: "Account deletion requested",
+    toast.warning("Account deletion requested", {
       description: "We'll send you an email to confirm account deletion.",
-      variant: "destructive",
-    })
-  }
+    });
+  };
 
   return (
     <div className="container mx-auto p-6 max-w-4xl">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900">Settings</h1>
-        <p className="text-gray-600 mt-2">Manage your account settings and preferences</p>
+        <p className="text-gray-600 mt-2">
+          Manage your account settings and preferences
+        </p>
       </div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+      <Tabs
+        value={activeTab}
+        onValueChange={setActiveTab}
+        className="space-y-6"
+      >
         <TabsList className="grid w-full grid-cols-6">
           <TabsTrigger value="profile" className="flex items-center gap-2">
             <User className="h-4 w-4" />
@@ -159,7 +179,10 @@ export default function SettingsPage() {
             <Shield className="h-4 w-4" />
             Account
           </TabsTrigger>
-          <TabsTrigger value="notifications" className="flex items-center gap-2">
+          <TabsTrigger
+            value="notifications"
+            className="flex items-center gap-2"
+          >
             <Bell className="h-4 w-4" />
             Notifications
           </TabsTrigger>
@@ -182,7 +205,9 @@ export default function SettingsPage() {
           <Card>
             <CardHeader>
               <CardTitle>Profile Information</CardTitle>
-              <CardDescription>Update your personal information and profile details</CardDescription>
+              <CardDescription>
+                Update your personal information and profile details
+              </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               {/* Profile Picture */}
@@ -196,7 +221,9 @@ export default function SettingsPage() {
                     <Camera className="h-4 w-4 mr-2" />
                     Change Photo
                   </Button>
-                  <p className="text-sm text-gray-500">JPG, GIF or PNG. Max size 2MB.</p>
+                  <p className="text-sm text-gray-500">
+                    JPG, GIF or PNG. Max size 2MB.
+                  </p>
                 </div>
               </div>
 
@@ -209,7 +236,9 @@ export default function SettingsPage() {
                   <Input
                     id="firstName"
                     value={profile.firstName}
-                    onChange={(e) => setProfile({ ...profile, firstName: e.target.value })}
+                    onChange={(e) =>
+                      setProfile({ ...profile, firstName: e.target.value })
+                    }
                   />
                 </div>
                 <div className="space-y-2">
@@ -217,7 +246,9 @@ export default function SettingsPage() {
                   <Input
                     id="lastName"
                     value={profile.lastName}
-                    onChange={(e) => setProfile({ ...profile, lastName: e.target.value })}
+                    onChange={(e) =>
+                      setProfile({ ...profile, lastName: e.target.value })
+                    }
                   />
                 </div>
               </div>
@@ -229,9 +260,14 @@ export default function SettingsPage() {
                     id="email"
                     type="email"
                     value={profile.email}
-                    onChange={(e) => setProfile({ ...profile, email: e.target.value })}
+                    onChange={(e) =>
+                      setProfile({ ...profile, email: e.target.value })
+                    }
                   />
-                  <Badge variant="secondary" className="bg-teal-100 text-teal-800">
+                  <Badge
+                    variant="secondary"
+                    className="bg-teal-100 text-teal-800"
+                  >
                     <Check className="h-3 w-3 mr-1" />
                     Verified
                   </Badge>
@@ -243,7 +279,9 @@ export default function SettingsPage() {
                 <Input
                   id="phone"
                   value={profile.phone}
-                  onChange={(e) => setProfile({ ...profile, phone: e.target.value })}
+                  onChange={(e) =>
+                    setProfile({ ...profile, phone: e.target.value })
+                  }
                 />
               </div>
 
@@ -253,7 +291,9 @@ export default function SettingsPage() {
                   id="bio"
                   placeholder="Tell others about yourself..."
                   value={profile.bio}
-                  onChange={(e) => setProfile({ ...profile, bio: e.target.value })}
+                  onChange={(e) =>
+                    setProfile({ ...profile, bio: e.target.value })
+                  }
                   rows={3}
                 />
               </div>
@@ -264,23 +304,35 @@ export default function SettingsPage() {
                   <Input
                     id="location"
                     value={profile.location}
-                    onChange={(e) => setProfile({ ...profile, location: e.target.value })}
+                    onChange={(e) =>
+                      setProfile({ ...profile, location: e.target.value })
+                    }
                   />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="timezone">Timezone</Label>
                   <Select
                     value={profile.timezone}
-                    onValueChange={(value) => setProfile({ ...profile, timezone: value })}
+                    onValueChange={(value) =>
+                      setProfile({ ...profile, timezone: value })
+                    }
                   >
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="America/Los_Angeles">Pacific Time</SelectItem>
-                      <SelectItem value="America/Denver">Mountain Time</SelectItem>
-                      <SelectItem value="America/Chicago">Central Time</SelectItem>
-                      <SelectItem value="America/New_York">Eastern Time</SelectItem>
+                      <SelectItem value="America/Los_Angeles">
+                        Pacific Time
+                      </SelectItem>
+                      <SelectItem value="America/Denver">
+                        Mountain Time
+                      </SelectItem>
+                      <SelectItem value="America/Chicago">
+                        Central Time
+                      </SelectItem>
+                      <SelectItem value="America/New_York">
+                        Eastern Time
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -298,7 +350,9 @@ export default function SettingsPage() {
                       id="website"
                       placeholder="https://yourwebsite.com"
                       value={profile.website}
-                      onChange={(e) => setProfile({ ...profile, website: e.target.value })}
+                      onChange={(e) =>
+                        setProfile({ ...profile, website: e.target.value })
+                      }
                     />
                   </div>
                   <div className="space-y-2">
@@ -307,7 +361,9 @@ export default function SettingsPage() {
                       id="twitter"
                       placeholder="@username"
                       value={profile.twitter}
-                      onChange={(e) => setProfile({ ...profile, twitter: e.target.value })}
+                      onChange={(e) =>
+                        setProfile({ ...profile, twitter: e.target.value })
+                      }
                     />
                   </div>
                   <div className="space-y-2">
@@ -316,7 +372,9 @@ export default function SettingsPage() {
                       id="instagram"
                       placeholder="@username"
                       value={profile.instagram}
-                      onChange={(e) => setProfile({ ...profile, instagram: e.target.value })}
+                      onChange={(e) =>
+                        setProfile({ ...profile, instagram: e.target.value })
+                      }
                     />
                   </div>
                 </div>
@@ -338,7 +396,9 @@ export default function SettingsPage() {
           <Card>
             <CardHeader>
               <CardTitle>Password & Security</CardTitle>
-              <CardDescription>Manage your password and security settings</CardDescription>
+              <CardDescription>
+                Manage your password and security settings
+              </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-4">
@@ -348,7 +408,12 @@ export default function SettingsPage() {
                     id="currentPassword"
                     type="password"
                     value={account.currentPassword}
-                    onChange={(e) => setAccount({ ...account, currentPassword: e.target.value })}
+                    onChange={(e) =>
+                      setAccount({
+                        ...account,
+                        currentPassword: e.target.value,
+                      })
+                    }
                   />
                 </div>
                 <div className="space-y-2">
@@ -357,7 +422,9 @@ export default function SettingsPage() {
                     id="newPassword"
                     type="password"
                     value={account.newPassword}
-                    onChange={(e) => setAccount({ ...account, newPassword: e.target.value })}
+                    onChange={(e) =>
+                      setAccount({ ...account, newPassword: e.target.value })
+                    }
                   />
                 </div>
                 <div className="space-y-2">
@@ -366,7 +433,12 @@ export default function SettingsPage() {
                     id="confirmPassword"
                     type="password"
                     value={account.confirmPassword}
-                    onChange={(e) => setAccount({ ...account, confirmPassword: e.target.value })}
+                    onChange={(e) =>
+                      setAccount({
+                        ...account,
+                        confirmPassword: e.target.value,
+                      })
+                    }
                   />
                 </div>
               </div>
@@ -385,20 +457,29 @@ export default function SettingsPage() {
                 <div className="flex items-center justify-between">
                   <div className="space-y-1">
                     <h4 className="font-medium">Two-Factor Authentication</h4>
-                    <p className="text-sm text-gray-500">Add an extra layer of security to your account</p>
+                    <p className="text-sm text-gray-500">
+                      Add an extra layer of security to your account
+                    </p>
                   </div>
                   <Switch
                     checked={account.twoFactorEnabled}
-                    onCheckedChange={(checked) => setAccount({ ...account, twoFactorEnabled: checked })}
+                    onCheckedChange={(checked) =>
+                      setAccount({ ...account, twoFactorEnabled: checked })
+                    }
                   />
                 </div>
 
                 <div className="flex items-center justify-between">
                   <div className="space-y-1">
                     <h4 className="font-medium">Email Verification</h4>
-                    <p className="text-sm text-gray-500">Your email address is verified</p>
+                    <p className="text-sm text-gray-500">
+                      Your email address is verified
+                    </p>
                   </div>
-                  <Badge variant="secondary" className="bg-teal-100 text-teal-800">
+                  <Badge
+                    variant="secondary"
+                    className="bg-teal-100 text-teal-800"
+                  >
                     <Check className="h-3 w-3 mr-1" />
                     Verified
                   </Badge>
@@ -412,7 +493,9 @@ export default function SettingsPage() {
                 <div className="border border-red-200 rounded-lg p-4 space-y-3">
                   <div>
                     <h5 className="font-medium">Delete Account</h5>
-                    <p className="text-sm text-gray-500">Permanently delete your account and all associated data</p>
+                    <p className="text-sm text-gray-500">
+                      Permanently delete your account and all associated data
+                    </p>
                   </div>
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
@@ -423,15 +506,21 @@ export default function SettingsPage() {
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                       <AlertDialogHeader>
-                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                        <AlertDialogTitle>
+                          Are you absolutely sure?
+                        </AlertDialogTitle>
                         <AlertDialogDescription>
-                          This action cannot be undone. This will permanently delete your account and remove all your
-                          data from our servers.
+                          This action cannot be undone. This will permanently
+                          delete your account and remove all your data from our
+                          servers.
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction onClick={handleDeleteAccount} className="bg-red-600 hover:bg-red-700">
+                        <AlertDialogAction
+                          onClick={handleDeleteAccount}
+                          className="bg-red-600 hover:bg-red-700"
+                        >
                           Delete Account
                         </AlertDialogAction>
                       </AlertDialogFooter>
@@ -448,7 +537,9 @@ export default function SettingsPage() {
           <Card>
             <CardHeader>
               <CardTitle>Notification Preferences</CardTitle>
-              <CardDescription>Choose how you want to be notified about activity</CardDescription>
+              <CardDescription>
+                Choose how you want to be notified about activity
+              </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               {/* Email Notifications */}
@@ -459,15 +550,24 @@ export default function SettingsPage() {
                 </h4>
                 <div className="space-y-3 pl-6">
                   {Object.entries(notifications.email).map(([key, value]) => (
-                    <div key={key} className="flex items-center justify-between">
+                    <div
+                      key={key}
+                      className="flex items-center justify-between"
+                    >
                       <div>
-                        <p className="font-medium capitalize">{key.replace(/([A-Z])/g, " $1")}</p>
+                        <p className="font-medium capitalize">
+                          {key.replace(/([A-Z])/g, " $1")}
+                        </p>
                         <p className="text-sm text-gray-500">
-                          {key === "rentalRequests" && "New rental requests for your items"}
-                          {key === "messages" && "New messages from other users"}
-                          {key === "payments" && "Payment confirmations and receipts"}
+                          {key === "rentalRequests" &&
+                            "New rental requests for your items"}
+                          {key === "messages" &&
+                            "New messages from other users"}
+                          {key === "payments" &&
+                            "Payment confirmations and receipts"}
                           {key === "reminders" && "Rental return reminders"}
-                          {key === "marketing" && "Product updates and promotional offers"}
+                          {key === "marketing" &&
+                            "Product updates and promotional offers"}
                         </p>
                       </div>
                       <Switch
@@ -494,12 +594,19 @@ export default function SettingsPage() {
                 </h4>
                 <div className="space-y-3 pl-6">
                   {Object.entries(notifications.push).map(([key, value]) => (
-                    <div key={key} className="flex items-center justify-between">
+                    <div
+                      key={key}
+                      className="flex items-center justify-between"
+                    >
                       <div>
-                        <p className="font-medium capitalize">{key.replace(/([A-Z])/g, " $1")}</p>
+                        <p className="font-medium capitalize">
+                          {key.replace(/([A-Z])/g, " $1")}
+                        </p>
                         <p className="text-sm text-gray-500">
-                          {key === "rentalRequests" && "Instant notifications for new requests"}
-                          {key === "messages" && "Real-time message notifications"}
+                          {key === "rentalRequests" &&
+                            "Instant notifications for new requests"}
+                          {key === "messages" &&
+                            "Real-time message notifications"}
                           {key === "payments" && "Payment status updates"}
                           {key === "reminders" && "Important rental reminders"}
                           {key === "marketing" && "Special offers and updates"}
@@ -529,13 +636,21 @@ export default function SettingsPage() {
                 </h4>
                 <div className="space-y-3 pl-6">
                   {Object.entries(notifications.sms).map(([key, value]) => (
-                    <div key={key} className="flex items-center justify-between">
+                    <div
+                      key={key}
+                      className="flex items-center justify-between"
+                    >
                       <div>
-                        <p className="font-medium capitalize">{key.replace(/([A-Z])/g, " $1")}</p>
+                        <p className="font-medium capitalize">
+                          {key.replace(/([A-Z])/g, " $1")}
+                        </p>
                         <p className="text-sm text-gray-500">
-                          {key === "rentalRequests" && "SMS alerts for urgent requests"}
-                          {key === "messages" && "Text notifications for messages"}
-                          {key === "payments" && "Payment confirmations via SMS"}
+                          {key === "rentalRequests" &&
+                            "SMS alerts for urgent requests"}
+                          {key === "messages" &&
+                            "Text notifications for messages"}
+                          {key === "payments" &&
+                            "Payment confirmations via SMS"}
                           {key === "reminders" && "Critical rental reminders"}
                           {key === "marketing" && "Promotional SMS messages"}
                         </p>
@@ -570,18 +685,24 @@ export default function SettingsPage() {
           <Card>
             <CardHeader>
               <CardTitle>Privacy Settings</CardTitle>
-              <CardDescription>Control your privacy and data sharing preferences</CardDescription>
+              <CardDescription>
+                Control your privacy and data sharing preferences
+              </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="space-y-1">
                     <h4 className="font-medium">Profile Visibility</h4>
-                    <p className="text-sm text-gray-500">Who can see your profile information</p>
+                    <p className="text-sm text-gray-500">
+                      Who can see your profile information
+                    </p>
                   </div>
                   <Select
                     value={privacy.profileVisibility}
-                    onValueChange={(value) => setPrivacy({ ...privacy, profileVisibility: value })}
+                    onValueChange={(value) =>
+                      setPrivacy({ ...privacy, profileVisibility: value })
+                    }
                   >
                     <SelectTrigger className="w-32">
                       <SelectValue />
@@ -597,44 +718,60 @@ export default function SettingsPage() {
                 <div className="flex items-center justify-between">
                   <div className="space-y-1">
                     <h4 className="font-medium">Show Email Address</h4>
-                    <p className="text-sm text-gray-500">Display your email on your public profile</p>
+                    <p className="text-sm text-gray-500">
+                      Display your email on your public profile
+                    </p>
                   </div>
                   <Switch
                     checked={privacy.showEmail}
-                    onCheckedChange={(checked) => setPrivacy({ ...privacy, showEmail: checked })}
+                    onCheckedChange={(checked) =>
+                      setPrivacy({ ...privacy, showEmail: checked })
+                    }
                   />
                 </div>
 
                 <div className="flex items-center justify-between">
                   <div className="space-y-1">
                     <h4 className="font-medium">Show Phone Number</h4>
-                    <p className="text-sm text-gray-500">Display your phone number on your public profile</p>
+                    <p className="text-sm text-gray-500">
+                      Display your phone number on your public profile
+                    </p>
                   </div>
                   <Switch
                     checked={privacy.showPhone}
-                    onCheckedChange={(checked) => setPrivacy({ ...privacy, showPhone: checked })}
+                    onCheckedChange={(checked) =>
+                      setPrivacy({ ...privacy, showPhone: checked })
+                    }
                   />
                 </div>
 
                 <div className="flex items-center justify-between">
                   <div className="space-y-1">
                     <h4 className="font-medium">Search Engine Indexing</h4>
-                    <p className="text-sm text-gray-500">Allow search engines to index your profile</p>
+                    <p className="text-sm text-gray-500">
+                      Allow search engines to index your profile
+                    </p>
                   </div>
                   <Switch
                     checked={privacy.allowSearchEngines}
-                    onCheckedChange={(checked) => setPrivacy({ ...privacy, allowSearchEngines: checked })}
+                    onCheckedChange={(checked) =>
+                      setPrivacy({ ...privacy, allowSearchEngines: checked })
+                    }
                   />
                 </div>
 
                 <div className="flex items-center justify-between">
                   <div className="space-y-1">
                     <h4 className="font-medium">Data Sharing</h4>
-                    <p className="text-sm text-gray-500">Share anonymized data for platform improvements</p>
+                    <p className="text-sm text-gray-500">
+                      Share anonymized data for platform improvements
+                    </p>
                   </div>
                   <Switch
                     checked={privacy.allowDataSharing}
-                    onCheckedChange={(checked) => setPrivacy({ ...privacy, allowDataSharing: checked })}
+                    onCheckedChange={(checked) =>
+                      setPrivacy({ ...privacy, allowDataSharing: checked })
+                    }
                   />
                 </div>
               </div>
@@ -655,12 +792,17 @@ export default function SettingsPage() {
           <Card>
             <CardHeader>
               <CardTitle>Payment Methods</CardTitle>
-              <CardDescription>Manage your payment methods and payout preferences</CardDescription>
+              <CardDescription>
+                Manage your payment methods and payout preferences
+              </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-4">
                 {paymentMethods.map((method) => (
-                  <div key={method.id} className="flex items-center justify-between p-4 border rounded-lg">
+                  <div
+                    key={method.id}
+                    className="flex items-center justify-between p-4 border rounded-lg"
+                  >
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-6 bg-gradient-to-r from-blue-600 to-purple-600 rounded flex items-center justify-center">
                         <CreditCard className="h-3 w-3 text-white" />
@@ -670,7 +812,10 @@ export default function SettingsPage() {
                           {method.brand} •••• {method.last4}
                         </p>
                         {method.isDefault && (
-                          <Badge variant="secondary" className="bg-teal-100 text-teal-800 text-xs">
+                          <Badge
+                            variant="secondary"
+                            className="bg-teal-100 text-teal-800 text-xs"
+                          >
                             Default
                           </Badge>
                         )}
@@ -745,7 +890,9 @@ export default function SettingsPage() {
           <Card>
             <CardHeader>
               <CardTitle>App Preferences</CardTitle>
-              <CardDescription>Customize your app experience and rental settings</CardDescription>
+              <CardDescription>
+                Customize your app experience and rental settings
+              </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-4">
@@ -754,7 +901,9 @@ export default function SettingsPage() {
                     <Label>Theme</Label>
                     <Select
                       value={preferences.theme}
-                      onValueChange={(value) => setPreferences({ ...preferences, theme: value })}
+                      onValueChange={(value) =>
+                        setPreferences({ ...preferences, theme: value })
+                      }
                     >
                       <SelectTrigger>
                         <SelectValue />
@@ -770,7 +919,9 @@ export default function SettingsPage() {
                     <Label>Language</Label>
                     <Select
                       value={preferences.language}
-                      onValueChange={(value) => setPreferences({ ...preferences, language: value })}
+                      onValueChange={(value) =>
+                        setPreferences({ ...preferences, language: value })
+                      }
                     >
                       <SelectTrigger>
                         <SelectValue />
@@ -789,7 +940,9 @@ export default function SettingsPage() {
                   <Label>Currency</Label>
                   <Select
                     value={preferences.currency}
-                    onValueChange={(value) => setPreferences({ ...preferences, currency: value })}
+                    onValueChange={(value) =>
+                      setPreferences({ ...preferences, currency: value })
+                    }
                   >
                     <SelectTrigger className="w-32">
                       <SelectValue />
@@ -813,12 +966,18 @@ export default function SettingsPage() {
                   <div className="space-y-1">
                     <h5 className="font-medium">Auto-Accept Requests</h5>
                     <p className="text-sm text-gray-500">
-                      Automatically accept rental requests that meet your criteria
+                      Automatically accept rental requests that meet your
+                      criteria
                     </p>
                   </div>
                   <Switch
                     checked={preferences.autoAcceptRequests}
-                    onCheckedChange={(checked) => setPreferences({ ...preferences, autoAcceptRequests: checked })}
+                    onCheckedChange={(checked) =>
+                      setPreferences({
+                        ...preferences,
+                        autoAcceptRequests: checked,
+                      })
+                    }
                   />
                 </div>
 
@@ -826,7 +985,12 @@ export default function SettingsPage() {
                   <Label>Default Rental Duration</Label>
                   <Select
                     value={preferences.defaultRentalDuration}
-                    onValueChange={(value) => setPreferences({ ...preferences, defaultRentalDuration: value })}
+                    onValueChange={(value) =>
+                      setPreferences({
+                        ...preferences,
+                        defaultRentalDuration: value,
+                      })
+                    }
                   >
                     <SelectTrigger className="w-40">
                       <SelectValue />
@@ -843,11 +1007,18 @@ export default function SettingsPage() {
                 <div className="flex items-center justify-between">
                   <div className="space-y-1">
                     <h5 className="font-medium">Require Security Deposit</h5>
-                    <p className="text-sm text-gray-500">Require a security deposit for all rentals</p>
+                    <p className="text-sm text-gray-500">
+                      Require a security deposit for all rentals
+                    </p>
                   </div>
                   <Switch
                     checked={preferences.requireDeposit}
-                    onCheckedChange={(checked) => setPreferences({ ...preferences, requireDeposit: checked })}
+                    onCheckedChange={(checked) =>
+                      setPreferences({
+                        ...preferences,
+                        requireDeposit: checked,
+                      })
+                    }
                   />
                 </div>
               </div>
@@ -864,5 +1035,5 @@ export default function SettingsPage() {
         </TabsContent>
       </Tabs>
     </div>
-  )
+  );
 }
