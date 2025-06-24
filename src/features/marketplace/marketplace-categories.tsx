@@ -6,7 +6,7 @@ import { categories } from "./dummy";
 export default function MarketplaceCategories() {
   const { activeCategory, setActiveCategory } = useItemStore();
   return (
-    <div className="mb-6 overflow-x-auto pb-2">
+    <div className="overflow-x-auto pb-1 mb-2">
       <Tabs
         defaultValue="all"
         value={activeCategory}

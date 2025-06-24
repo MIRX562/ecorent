@@ -36,6 +36,9 @@ interface ItemStore {
 
   conditions: string[];
   setConditions: (v: string[]) => void;
+
+  sortBy: string;
+  setSortBy: (v: string) => void;
 }
 
 export const useItemStore = create<ItemStore>((set, get) => ({
@@ -71,10 +74,11 @@ export const useItemStore = create<ItemStore>((set, get) => ({
       priceRange,
       maxDistance,
       ratings,
+      sortBy,
       // conditions,
     } = get();
 
-    return allItems.filter((item) => {
+    let filtered = allItems.filter((item) => {
       const matchSearch =
         item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.description.toLowerCase().includes(searchQuery.toLowerCase());
@@ -102,6 +106,26 @@ export const useItemStore = create<ItemStore>((set, get) => ({
         // matchCondition
       );
     });
+
+    // Sorting
+    switch (sortBy) {
+      case "priceLow":
+        filtered = filtered.sort((a, b) => a.price - b.price);
+        break;
+      case "priceHigh":
+        filtered = filtered.sort((a, b) => b.price - a.price);
+        break;
+      case "distance":
+        filtered = filtered.sort((a, b) => a.distance - b.distance);
+        break;
+      case "rating":
+        filtered = filtered.sort((a, b) => b.rating - a.rating);
+        break;
+      default:
+        // relevance: no extra sort
+        break;
+    }
+    return filtered;
   },
 
   priceRange: [0, 100],
@@ -115,4 +139,7 @@ export const useItemStore = create<ItemStore>((set, get) => ({
 
   conditions: [],
   setConditions: (v) => set({ conditions: v }),
+
+  sortBy: "relevance",
+  setSortBy: (v) => set({ sortBy: v }),
 }));

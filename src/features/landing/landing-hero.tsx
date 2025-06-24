@@ -70,7 +70,7 @@ export default function HeroSection() {
           <div className="relative flex items-center justify-center motion-delay-300 motion-translate-y-in-[10%] motion-opacity-in-[0%]">
             <div className="relative h-[350px] w-full overflow-hidden rounded-xl md:h-[450px] lg:h-[550px] bg-gradient-to-br from-teal-100 to-cyan-100 dark:from-teal-600 dark:to-cyan-600 p-1">
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-full max-w-md p-4 bg-white/90 dark:bg-gray-700/90 backdrop-blur-sm rounded-lg shadow-lg">
+                <div className="w-full max-w-[300px] md:max-w-md p-4 bg-white/90 dark:bg-gray-700/90 backdrop-blur-sm rounded-lg shadow-lg">
                   <div className="mb-4">
                     <h3 className="text-lg font-medium">
                       Temukan yang anda butuhkan
@@ -154,7 +154,7 @@ export default function HeroSection() {
                 className="rounded-xl h-full"
               />
             </div>
-            <div className="absolute -bottom-6 left-6 right-6 mx-auto flex max-w-md items-center justify-between rounded-lg border bg-white/90 dark:bg-gray-700/90 backdrop-blur-sm p-4 shadow-lg">
+            <div className="absolute -bottom-9 left-6 right-6 mx-auto flex max-w-md items-center justify-between rounded-lg border bg-white/90 dark:bg-gray-700/90 backdrop-blur-sm p-4 shadow-lg">
               <div className="flex items-center gap-2">
                 <div className="h-10 w-10 rounded-full bg-teal-100 flex items-center justify-center">
                   <Recycle className="h-5 w-5 text-teal-600" />

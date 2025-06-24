@@ -128,9 +128,9 @@ export default function MarketplaceView() {
   return (
     <div className="min-h-screen bg-muted/30">
       <MarketplaceHeader />
-      <main className="container py-6 px-2 mx-auto">
-        <MarketplaceOptions />
+      <main className="container py-2 md:py-6 px-2 mx-auto">
         <MarketplaceCategories />
+        <MarketplaceOptions />
 
         {/* View content */}
         <div className="space-y-6">
@@ -156,7 +156,7 @@ export default function MarketplaceView() {
                 </Button>
               </div>
             ) : (
-              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              <div className="grid gap-2 md:gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {filteredItems.slice(0, visibleItems).map((item) => (
                   <Card
                     key={item.id}
@@ -207,7 +207,7 @@ export default function MarketplaceView() {
                       href={`/marketplace/${item.id}`}
                       className="cursor-pointer"
                     >
-                      <CardContent className="p-4">
+                      <CardContent className="p-4 pt-0">
                         <div className="space-y-1">
                           <h3 className="font-medium truncate">{item.title}</h3>
                           <p className="text-sm text-muted-foreground line-clamp-2">

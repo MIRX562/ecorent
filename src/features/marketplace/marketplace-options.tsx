@@ -40,18 +40,16 @@ export default function MarketplaceOptions() {
     maxDistance,
     setMaxDistance,
     ratings,
+    sortBy,
+    setSortBy,
   } = useItemStore();
 
   return (
-    <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-6">
-      <div className="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0">
+    <div className="flex gap-4 items-center justify-between w-full pb-2">
+      <div className="flex items-center gap-2 overflow-x-auto">
         <Sheet>
           <SheetTrigger asChild>
-            <Button
-              variant="outline"
-              size="sm"
-              className="flex items-center gap-1"
-            >
+            <Button variant="outline" className="flex items-center gap-1">
               <Sliders className="h-4 w-4" />
               <span>Filters</span>
             </Button>
@@ -169,47 +167,74 @@ export default function MarketplaceOptions() {
             </SheetFooter>
           </SheetContent>
         </Sheet>
-        <div className="flex items-center gap-1 text-sm text-muted-foreground">
+        {/* <div className="flex items-center gap-1 text-sm text-muted-foreground">
           <MapPin className="h-4 w-4" />
           <span>Portland, OR</span>
           <Button variant="ghost" size="icon" className="h-6 w-6">
             <ChevronDown className="h-3 w-3" />
           </Button>
-        </div>
+        </div> */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="sm">
+            <Button variant="outline">
               <Filter className="mr-2 h-4 w-4" />
               Sort By
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem>Relevance</DropdownMenuItem>
-            <DropdownMenuItem>Price: Low to High</DropdownMenuItem>
-            <DropdownMenuItem>Price: High to Low</DropdownMenuItem>
-            <DropdownMenuItem>Distance: Nearest</DropdownMenuItem>
-            <DropdownMenuItem>Rating: Highest</DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => setSortBy("relevance")}
+              className={sortBy === "relevance" ? "font-semibold bg-muted" : ""}
+            >
+              Relevance
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => setSortBy("priceLow")}
+              className={sortBy === "priceLow" ? "font-semibold bg-muted" : ""}
+            >
+              Price: Low to High
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => setSortBy("priceHigh")}
+              className={sortBy === "priceHigh" ? "font-semibold bg-muted" : ""}
+            >
+              Price: High to Low
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => setSortBy("distance")}
+              className={sortBy === "distance" ? "font-semibold bg-muted" : ""}
+            >
+              Distance: Nearest
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => setSortBy("rating")}
+              className={sortBy === "rating" ? "font-semibold bg-muted" : ""}
+            >
+              Rating: Highest
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
       <div className="flex items-center gap-2">
-        <span className="text-sm text-muted-foreground">
+        {/* <span className="text-sm text-muted-foreground">
           {getFilteredItems.length} results
-        </span>
-        <div className="border rounded-md p-1">
+        </span> */}
+        <div className="border rounded-md">
           <Button
             variant={viewMode === "grid" ? "default" : "ghost"}
+            size="icon"
             onClick={() => setViewMode("grid")}
           >
             <Grid className="h-4 w-4" />
-            <span className="">Grid view</span>
+            <span className="sr-only">Grid view</span>
           </Button>
           <Button
             variant={viewMode === "map" ? "default" : "ghost"}
+            size="icon"
             onClick={() => setViewMode("map")}
           >
             <Map className="h-4 w-4" />
-            <span className="">Map view</span>
+            <span className="sr-only">Map view</span>
           </Button>
         </div>
       </div>
