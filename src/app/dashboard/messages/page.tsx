@@ -7,6 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Search, MessageCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { usePixabayImage } from "@/hooks/use-pixabay-image";
+import Image from "next/image";
 
 interface RentalItem {
   id: string;
@@ -116,6 +118,28 @@ const conversations: Conversation[] = [
   },
 ];
 
+// Child component for rental item image with Pixabay hook
+function ConversationItemImage({
+  name,
+  fallback,
+  className,
+}: {
+  name: string;
+  fallback: string;
+  className?: string;
+}) {
+  const imageUrl = usePixabayImage(name, fallback);
+  return (
+    <Image
+      src={imageUrl}
+      alt={name}
+      width={20}
+      height={20}
+      className={className}
+    />
+  );
+}
+
 export default function MessagesPage() {
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -155,7 +179,7 @@ export default function MessagesPage() {
   );
 
   return (
-    <div className="max-w-4xl mx-auto p-4 space-y-6">
+    <div className="mx-auto md:p-4 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -186,7 +210,7 @@ export default function MessagesPage() {
       </div>
 
       {/* Conversations List */}
-      <div className="space-y-2">
+      <div className="flex flex-col gap-2">
         {filteredConversations.length === 0 ? (
           <div className="text-center py-12">
             <MessageCircle className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
@@ -240,9 +264,11 @@ export default function MessagesPage() {
                           {conversation.participant.name}
                         </h3>
                         <div className="flex items-center gap-2 mt-1">
-                          <img
-                            src={conversation.item.image || "/placeholder.svg"}
-                            alt={conversation.item.name}
+                          <ConversationItemImage
+                            name={conversation.item.name}
+                            fallback={
+                              conversation.item.image || "/placeholder.svg"
+                            }
                             className="w-5 h-5 rounded object-cover"
                           />
                           <span className="text-xs text-teal-600 dark:text-teal-400 font-medium truncate">

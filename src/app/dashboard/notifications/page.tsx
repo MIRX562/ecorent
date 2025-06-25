@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Image from "next/image"
-import Link from "next/link"
+import { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
 import {
   Bell,
   Check,
@@ -16,13 +16,18 @@ import {
   CheckCircle,
   XCircle,
   Settings,
-} from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -33,7 +38,15 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
+} from "@/components/ui/alert-dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { usePixabayImage } from "@/hooks/use-pixabay-image";
 
 // Sample notifications data
 const notifications = [
@@ -150,84 +163,115 @@ const notifications = [
     id: 8,
     type: "system",
     title: "Profile verification complete",
-    message: "Your profile has been successfully verified. You can now rent premium items!",
+    message:
+      "Your profile has been successfully verified. You can now rent premium items!",
     timestamp: "2024-01-17T12:00:00Z",
     read: true,
     actionUrl: "/dashboard/profile",
   },
-]
+];
 
 const getNotificationIcon = (type: string) => {
   switch (type) {
     case "rental_request":
-      return <Clock className="h-4 w-4 text-blue-500" />
+      return <Clock className="h-4 w-4 text-blue-500" />;
     case "message":
-      return <MessageSquare className="h-4 w-4 text-green-500" />
+      return <MessageSquare className="h-4 w-4 text-green-500" />;
     case "rental_approved":
-      return <CheckCircle className="h-4 w-4 text-green-500" />
+      return <CheckCircle className="h-4 w-4 text-green-500" />;
     case "rental_declined":
-      return <XCircle className="h-4 w-4 text-red-500" />
+      return <XCircle className="h-4 w-4 text-red-500" />;
     case "payment":
-      return <DollarSign className="h-4 w-4 text-green-500" />
+      return <DollarSign className="h-4 w-4 text-green-500" />;
     case "review":
-      return <Star className="h-4 w-4 text-amber-500" />
+      return <Star className="h-4 w-4 text-amber-500" />;
     case "rental_reminder":
-      return <Calendar className="h-4 w-4 text-orange-500" />
+      return <Calendar className="h-4 w-4 text-orange-500" />;
     case "system":
-      return <AlertCircle className="h-4 w-4 text-blue-500" />
+      return <AlertCircle className="h-4 w-4 text-blue-500" />;
     default:
-      return <Bell className="h-4 w-4 text-gray-500" />
+      return <Bell className="h-4 w-4 text-gray-500" />;
   }
-}
+};
 
 const formatTimestamp = (timestamp: string) => {
-  const date = new Date(timestamp)
-  const now = new Date()
-  const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60))
+  const date = new Date(timestamp);
+  const now = new Date();
+  const diffInHours = Math.floor(
+    (now.getTime() - date.getTime()) / (1000 * 60 * 60)
+  );
 
   if (diffInHours < 1) {
-    const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / (1000 * 60))
-    return `${diffInMinutes}m ago`
+    const diffInMinutes = Math.floor(
+      (now.getTime() - date.getTime()) / (1000 * 60)
+    );
+    return `${diffInMinutes}m ago`;
   } else if (diffInHours < 24) {
-    return `${diffInHours}h ago`
+    return `${diffInHours}h ago`;
   } else {
-    const diffInDays = Math.floor(diffInHours / 24)
-    return `${diffInDays}d ago`
+    const diffInDays = Math.floor(diffInHours / 24);
+    return `${diffInDays}d ago`;
   }
+};
+
+// Child component for notification item image with Pixabay hook
+function NotificationItemImage({
+  name,
+  fallback,
+}: {
+  name: string;
+  fallback: string;
+}) {
+  const imageUrl = usePixabayImage(name, fallback);
+  return (
+    <Image
+      src={imageUrl}
+      alt={name}
+      width={40}
+      height={40}
+      className="rounded object-cover"
+    />
+  );
 }
 
 export default function NotificationsPage() {
-  const [notificationList, setNotificationList] = useState(notifications)
-  const [activeTab, setActiveTab] = useState("all")
+  const [notificationList, setNotificationList] = useState(notifications);
+  const [activeTab, setActiveTab] = useState("all");
 
-  const unreadCount = notificationList.filter((n) => !n.read).length
+  const unreadCount = notificationList.filter((n) => !n.read).length;
 
   const filteredNotifications = notificationList.filter((notification) => {
-    if (activeTab === "all") return true
-    if (activeTab === "unread") return !notification.read
-    return notification.type === activeTab
-  })
+    if (activeTab === "all") return true;
+    if (activeTab === "unread") return !notification.read;
+    return notification.type === activeTab;
+  });
 
   const markAsRead = (id: number) => {
     setNotificationList((prev) =>
-      prev.map((notification) => (notification.id === id ? { ...notification, read: true } : notification)),
-    )
-  }
+      prev.map((notification) =>
+        notification.id === id ? { ...notification, read: true } : notification
+      )
+    );
+  };
 
   const markAllAsRead = () => {
-    setNotificationList((prev) => prev.map((notification) => ({ ...notification, read: true })))
-  }
+    setNotificationList((prev) =>
+      prev.map((notification) => ({ ...notification, read: true }))
+    );
+  };
 
   const deleteNotification = (id: number) => {
-    setNotificationList((prev) => prev.filter((notification) => notification.id !== id))
-  }
+    setNotificationList((prev) =>
+      prev.filter((notification) => notification.id !== id)
+    );
+  };
 
   const clearAllNotifications = () => {
-    setNotificationList([])
-  }
+    setNotificationList([]);
+  };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-2 md:space-y-6">
       {/* Header */}
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
@@ -245,7 +289,12 @@ export default function NotificationsPage() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" onClick={markAllAsRead} disabled={unreadCount === 0}>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={markAllAsRead}
+            disabled={unreadCount === 0}
+          >
             <Check className="mr-2 h-4 w-4" />
             Mark All Read
           </Button>
@@ -260,7 +309,10 @@ export default function NotificationsPage() {
               <DropdownMenuItem>Notification Preferences</DropdownMenuItem>
               <DropdownMenuItem>Email Settings</DropdownMenuItem>
               <DropdownMenuItem>Push Notifications</DropdownMenuItem>
-              <DropdownMenuItem className="text-red-600" onClick={clearAllNotifications}>
+              <DropdownMenuItem
+                className="text-red-600"
+                onClick={clearAllNotifications}
+              >
                 Clear All Notifications
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -270,7 +322,24 @@ export default function NotificationsPage() {
 
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-6 lg:w-auto lg:grid-cols-none lg:flex">
+        {/* Mobile: Dropdown for tabs */}
+        <div className="block md:hidden mb-4">
+          <Select value={activeTab} onValueChange={setActiveTab}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Filter notifications" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All</SelectItem>
+              <SelectItem value="unread">Unread</SelectItem>
+              <SelectItem value="rental_request">Requests</SelectItem>
+              <SelectItem value="message">Messages</SelectItem>
+              <SelectItem value="payment">Payments</SelectItem>
+              <SelectItem value="system">System</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        {/* Desktop: TabsList */}
+        <TabsList className="hidden md:grid w-full grid-cols-6 lg:w-auto lg:grid-cols-none lg:flex">
           <TabsTrigger
             value="all"
             className="data-[state=active]:bg-teal-50 data-[state=active]:text-teal-600 dark:data-[state=active]:bg-teal-950/50 dark:data-[state=active]:text-teal-400"
@@ -313,8 +382,7 @@ export default function NotificationsPage() {
             System
           </TabsTrigger>
         </TabsList>
-
-        <TabsContent value={activeTab} className="mt-6">
+        <TabsContent value={activeTab} className="md:mt-6">
           {filteredNotifications.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 text-center">
               <div className="rounded-full bg-muted p-6 mb-4">
@@ -325,8 +393,8 @@ export default function NotificationsPage() {
                 {activeTab === "unread"
                   ? "You're all caught up! No unread notifications."
                   : activeTab === "all"
-                    ? "You don't have any notifications yet."
-                    : `No ${activeTab.replace("_", " ")} notifications found.`}
+                  ? "You don't have any notifications yet."
+                  : `No ${activeTab.replace("_", " ")} notifications found.`}
               </p>
             </div>
           ) : (
@@ -335,31 +403,48 @@ export default function NotificationsPage() {
                 <Card
                   key={notification.id}
                   className={`transition-all hover:shadow-md ${
-                    !notification.read ? "border-l-4 border-l-teal-500 bg-teal-50/50 dark:bg-teal-950/10" : ""
+                    !notification.read
+                      ? "border-l-4 border-l-teal-500 bg-teal-50/50 dark:bg-teal-950/10"
+                      : ""
                   }`}
                 >
                   <CardContent className="p-4">
                     <div className="flex items-start gap-4">
-                      <div className="flex-shrink-0">{getNotificationIcon(notification.type)}</div>
+                      <div className="flex-shrink-0">
+                        {getNotificationIcon(notification.type)}
+                      </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-start justify-between gap-2">
                           <div className="flex-1">
                             <div className="flex items-center gap-2 mb-1">
                               <h3
-                                className={`text-sm font-medium ${!notification.read ? "text-foreground" : "text-muted-foreground"}`}
+                                className={`text-sm font-medium ${
+                                  !notification.read
+                                    ? "text-foreground"
+                                    : "text-muted-foreground"
+                                }`}
                               >
                                 {notification.title}
                               </h3>
-                              {!notification.read && <div className="h-2 w-2 rounded-full bg-teal-500" />}
+                              {!notification.read && (
+                                <div className="h-2 w-2 rounded-full bg-teal-500" />
+                              )}
                             </div>
-                            <p className="text-sm text-muted-foreground mb-2">{notification.message}</p>
+                            <p className="text-sm text-muted-foreground mb-2">
+                              {notification.message}
+                            </p>
                             <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                              <span>{formatTimestamp(notification.timestamp)}</span>
+                              <span>
+                                {formatTimestamp(notification.timestamp)}
+                              </span>
                               {notification.user && (
                                 <div className="flex items-center gap-1">
                                   <Avatar className="h-4 w-4">
                                     <AvatarImage
-                                      src={notification.user.avatar || "/placeholder.svg"}
+                                      src={
+                                        notification.user.avatar ||
+                                        "/placeholder.svg"
+                                      }
                                       alt={notification.user.name}
                                     />
                                     <AvatarFallback className="text-xs">
@@ -371,8 +456,13 @@ export default function NotificationsPage() {
                               )}
                               {notification.rating && (
                                 <div className="flex items-center gap-1">
-                                  {Array.from({ length: notification.rating }).map((_, i) => (
-                                    <Star key={i} className="h-3 w-3 fill-amber-500 text-amber-500" />
+                                  {Array.from({
+                                    length: notification.rating,
+                                  }).map((_, i) => (
+                                    <Star
+                                      key={i}
+                                      className="h-3 w-3 fill-amber-500 text-amber-500"
+                                    />
                                   ))}
                                 </div>
                               )}
@@ -389,12 +479,12 @@ export default function NotificationsPage() {
                           <div className="flex items-center gap-1">
                             {notification.item && (
                               <div className="flex items-center gap-2 mr-2">
-                                <Image
-                                  src={notification.item.image || "/placeholder.svg"}
-                                  alt={notification.item.name}
-                                  width={40}
-                                  height={40}
-                                  className="rounded object-cover"
+                                <NotificationItemImage
+                                  name={notification.item.name}
+                                  fallback={
+                                    notification.item.image ||
+                                    "/placeholder.svg"
+                                  }
                                 />
                                 <span className="text-xs text-muted-foreground hidden sm:block">
                                   {notification.item.name}
@@ -414,22 +504,33 @@ export default function NotificationsPage() {
                             )}
                             <AlertDialog>
                               <AlertDialogTrigger asChild>
-                                <Button variant="ghost" size="sm" className="h-8 px-2 text-red-500 hover:text-red-600">
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  className="h-8 px-2 text-red-500 hover:text-red-600"
+                                >
                                   <Trash2 className="h-3 w-3" />
-                                  <span className="sr-only">Delete notification</span>
+                                  <span className="sr-only">
+                                    Delete notification
+                                  </span>
                                 </Button>
                               </AlertDialogTrigger>
                               <AlertDialogContent>
                                 <AlertDialogHeader>
-                                  <AlertDialogTitle>Delete notification?</AlertDialogTitle>
+                                  <AlertDialogTitle>
+                                    Delete notification?
+                                  </AlertDialogTitle>
                                   <AlertDialogDescription>
-                                    This notification will be permanently deleted and cannot be recovered.
+                                    This notification will be permanently
+                                    deleted and cannot be recovered.
                                   </AlertDialogDescription>
                                 </AlertDialogHeader>
                                 <AlertDialogFooter>
                                   <AlertDialogCancel>Cancel</AlertDialogCancel>
                                   <AlertDialogAction
-                                    onClick={() => deleteNotification(notification.id)}
+                                    onClick={() =>
+                                      deleteNotification(notification.id)
+                                    }
                                     className="bg-red-500 hover:bg-red-600"
                                   >
                                     Delete
@@ -461,5 +562,5 @@ export default function NotificationsPage() {
         </TabsContent>
       </Tabs>
     </div>
-  )
+  );
 }

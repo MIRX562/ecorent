@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState, useEffect } from "react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   Leaf,
   Home,
@@ -18,24 +18,24 @@ import {
   Menu,
   User,
   Clock,
-} from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { ThemeToggle } from "@/components/theme-toggle"
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 interface DashboardLayoutProps {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
-  const pathname = usePathname()
-  const [isMounted, setIsMounted] = useState(false)
+  const pathname = usePathname();
+  const [isMounted, setIsMounted] = useState(false);
 
   // Prevent hydration errors
   useEffect(() => {
-    setIsMounted(true)
-  }, [])
+    setIsMounted(true);
+  }, []);
 
   const navigation = [
     { name: "Dashboard", href: "/dashboard", icon: Home },
@@ -45,16 +45,16 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     { name: "Messages", href: "/dashboard/messages", icon: MessageSquare },
     { name: "Saved Items", href: "/dashboard/saved", icon: Heart },
     { name: "Notifications", href: "/dashboard/notifications", icon: Bell },
-  ]
+  ];
 
   const userNavigation = [
     { name: "Profile", href: "/dashboard/profile", icon: User },
     { name: "Settings", href: "/dashboard/settings", icon: Settings },
     { name: "Logout", href: "/login", icon: LogOut },
-  ]
+  ];
 
   if (!isMounted) {
-    return null
+    return null;
   }
 
   return (
@@ -62,12 +62,19 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       {/* Mobile sidebar */}
       <Sheet>
         <SheetTrigger asChild>
-          <Button variant="ghost" size="icon" className="md:hidden fixed top-4 left-4 z-40">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="md:hidden fixed top-4 left-4 z-40"
+          >
             <Menu className="h-5 w-5" />
             <span className="sr-only">Toggle menu</span>
           </Button>
         </SheetTrigger>
-        <SheetContent side="left" className="p-0 bg-white dark:bg-gray-950 w-64">
+        <SheetContent
+          side="left"
+          className="p-0 bg-white dark:bg-gray-950 w-64"
+        >
           <div className="flex h-full flex-col">
             <div className="border-b px-6 py-4">
               <Link href="/" className="flex items-center gap-2">
@@ -97,7 +104,9 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             </div>
             <div className="border-t">
               <div className="px-2 py-2">
-                <h3 className="px-3 text-xs font-medium text-muted-foreground">Account</h3>
+                <h3 className="px-3 text-xs font-medium text-muted-foreground">
+                  Account
+                </h3>
                 <nav className="grid gap-1 pt-1">
                   {userNavigation.map((item) => (
                     <Link
@@ -118,12 +127,17 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               <div className="p-4">
                 <div className="flex items-center gap-3 rounded-lg bg-muted p-3">
                   <Avatar>
-                    <AvatarImage src="/placeholder.svg?height=32&width=32" alt="User" />
+                    <AvatarImage
+                      src="/placeholder.svg?height=32&width=32"
+                      alt="User"
+                    />
                     <AvatarFallback>JD</AvatarFallback>
                   </Avatar>
                   <div className="flex-1 overflow-hidden">
                     <p className="text-sm font-medium leading-none">John Doe</p>
-                    <p className="text-xs text-muted-foreground truncate">john.doe@example.com</p>
+                    <p className="text-xs text-muted-foreground truncate">
+                      john.doe@example.com
+                    </p>
                   </div>
                 </div>
               </div>
@@ -163,7 +177,9 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           </div>
           <div className="border-t">
             <div className="px-2 py-2">
-              <h3 className="px-3 text-xs font-medium text-muted-foreground">Account</h3>
+              <h3 className="px-3 text-xs font-medium text-muted-foreground">
+                Account
+              </h3>
               <nav className="grid gap-1 pt-1">
                 {userNavigation.map((item) => (
                   <Link
@@ -184,12 +200,17 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             <div className="p-4">
               <div className="flex items-center gap-3 rounded-lg bg-muted p-3">
                 <Avatar>
-                  <AvatarImage src="/placeholder.svg?height=32&width=32" alt="User" />
+                  <AvatarImage
+                    src="/placeholder.svg?height=32&width=32"
+                    alt="User"
+                  />
                   <AvatarFallback>JD</AvatarFallback>
                 </Avatar>
                 <div className="flex-1 overflow-hidden">
                   <p className="text-sm font-medium leading-none">John Doe</p>
-                  <p className="text-xs text-muted-foreground truncate">john.doe@example.com</p>
+                  <p className="text-xs text-muted-foreground truncate">
+                    john.doe@example.com
+                  </p>
                 </div>
               </div>
             </div>
@@ -207,7 +228,10 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               Notifications
             </Button>
             <Avatar className="hidden md:block">
-              <AvatarImage src="/placeholder.svg?height=32&width=32" alt="User" />
+              <AvatarImage
+                src="/placeholder.svg?height=32&width=32"
+                alt="User"
+              />
               <AvatarFallback>JD</AvatarFallback>
             </Avatar>
           </div>
@@ -215,5 +239,5 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         <main className="flex-1 overflow-auto p-4 md:p-6">{children}</main>
       </div>
     </div>
-  )
+  );
 }

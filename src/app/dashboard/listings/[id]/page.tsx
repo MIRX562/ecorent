@@ -51,6 +51,38 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { Progress } from "@/components/ui/progress"
+import { usePixabayImage } from "@/hooks/use-pixabay-image"
+
+// Child component for image thumbnail with Pixabay hook
+function ListingImageThumbnail({
+  image,
+  alt,
+  isSelected,
+  onClick,
+}: {
+  image: string
+  alt: string
+  isSelected: boolean
+  onClick: () => void
+}) {
+  const imageUrl = usePixabayImage(alt, image || "/placeholder.svg")
+  return (
+    <button
+      className={`relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-md border-2 ${
+        isSelected ? "border-teal-500" : "border-transparent"
+      }`}
+      onClick={onClick}
+      type="button"
+    >
+      <Image
+        src={imageUrl}
+        alt={alt}
+        fill
+        className="object-cover"
+      />
+    </button>
+  )
+}
 
 // Sample listing data (in a real app, this would be fetched based on the ID)
 const listingData = {
@@ -207,6 +239,9 @@ export default function ListingDetailsPage() {
     router.push("/dashboard/listings")
   }
 
+  // Move hook call to top level for main image
+  const mainImageUrl = usePixabayImage(listingData.title, listingData.images[selectedImage] || "/placeholder.svg")
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -278,7 +313,7 @@ export default function ListingDetailsPage() {
             <CardContent className="p-4 space-y-2">
               <div className="relative aspect-video overflow-hidden rounded-lg">
                 <Image
-                  src={listingData.images[selectedImage] || "/placeholder.svg"}
+                  src={mainImageUrl}
                   alt={listingData.title}
                   fill
                   className="object-cover"
@@ -286,20 +321,13 @@ export default function ListingDetailsPage() {
               </div>
               <div className="flex gap-2 overflow-x-auto pb-2">
                 {listingData.images.map((image, index) => (
-                  <button
+                  <ListingImageThumbnail
                     key={index}
-                    className={`relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-md border-2 ${
-                      selectedImage === index ? "border-teal-500" : "border-transparent"
-                    }`}
+                    image={image}
+                    alt={`${listingData.title} ${index + 1}`}
+                    isSelected={selectedImage === index}
                     onClick={() => setSelectedImage(index)}
-                  >
-                    <Image
-                      src={image || "/placeholder.svg"}
-                      alt={`${listingData.title} ${index + 1}`}
-                      fill
-                      className="object-cover"
-                    />
-                  </button>
+                  />
                 ))}
               </div>
             </CardContent>
@@ -433,7 +461,7 @@ export default function ListingDetailsPage() {
                   </div>
                   <h3 className="text-lg font-medium">No Pending Requests</h3>
                   <p className="text-sm text-muted-foreground mt-1">
-                    You don't have any pending rental requests for this item.
+                    You don&apos;t have any pending rental requests for this item.
                   </p>
                 </div>
               ) : (
@@ -510,7 +538,7 @@ export default function ListingDetailsPage() {
                     <Clock className="h-6 w-6 text-muted-foreground" />
                   </div>
                   <h3 className="text-lg font-medium">No Rental History</h3>
-                  <p className="text-sm text-muted-foreground mt-1">This item hasn't been rented out yet.</p>
+                  <p className="text-sm text-muted-foreground mt-1">This item hasn&apos;t been rented out yet.</p>
                 </div>
               ) : (
                 <div className="space-y-4">
@@ -557,7 +585,7 @@ export default function ListingDetailsPage() {
                     <Star className="h-6 w-6 text-muted-foreground" />
                   </div>
                   <h3 className="text-lg font-medium">No Reviews Yet</h3>
-                  <p className="text-sm text-muted-foreground mt-1">This item hasn't received any reviews yet.</p>
+                  <p className="text-sm text-muted-foreground mt-1">This item hasn&apos;t received any reviews yet.</p>
                 </div>
               ) : (
                 <div className="space-y-4">

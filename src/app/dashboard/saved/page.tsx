@@ -1,16 +1,30 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Image from "next/image"
-import Link from "next/link"
-import { Heart, MapPin, Star, Search, Filter, Grid, List, MessageCircle } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardFooter } from "@/components/ui/card"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import {
+  Heart,
+  MapPin,
+  Star,
+  Search,
+  Filter,
+  Grid,
+  List,
+  MessageCircle,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -21,7 +35,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
+} from "@/components/ui/alert-dialog";
+import { usePixabayImage } from "@/hooks/use-pixabay-image";
 
 // Sample saved items data
 const savedItems = [
@@ -145,7 +160,7 @@ const savedItems = [
     savedDate: "2024-01-03",
     available: true,
   },
-]
+];
 
 const categories = [
   { id: "all", name: "All Items" },
@@ -153,68 +168,195 @@ const categories = [
   { id: "outdoor", name: "Outdoor Gear" },
   { id: "sports", name: "Sports Equipment" },
   { id: "vehicles", name: "Vehicles" },
-]
+];
+
+function SavedItemCard({
+  item,
+  removeFromSaved,
+  formatDate,
+}: {
+  item: (typeof savedItems)[0];
+  removeFromSaved: (id: number) => void;
+  formatDate: (date: string) => string;
+}) {
+  const pixabayImg = usePixabayImage(
+    item.title,
+    item.image || "/placeholder.svg"
+  );
+  return (
+    <Card className="overflow-hidden group w-full max-w-full">
+      <div className="relative w-full">
+        <Link href={`/marketplace/${item.id}`} className="block w-full">
+          <Image
+            src={pixabayImg}
+            alt={item.title}
+            width={400}
+            height={300}
+            className="object-cover w-full h-32 sm:h-48"
+            sizes="(max-width: 640px) 100vw, 400px"
+          />
+          <Badge className="absolute bottom-2 left-2 bg-black/50 hover:bg-black/60 text-white">
+            ${item.price}/{item.priceUnit}
+          </Badge>
+        </Link>
+        {!item.available && (
+          <Badge variant="destructive" className="absolute top-2 left-2">
+            Unavailable
+          </Badge>
+        )}
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute top-2 right-2 h-8 w-8 rounded-full bg-red-100 text-red-500 hover:bg-red-200 hover:text-red-600 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/30"
+            >
+              <Heart className="h-4 w-4 fill-current" />
+              <span className="sr-only">Remove from saved</span>
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Remove from saved items?</AlertDialogTitle>
+              <AlertDialogDescription>
+                This will remove &quot;{item.title}&quot; from your saved items.
+                You can always save it again later.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={() => removeFromSaved(item.id)}
+                className="bg-red-500 hover:bg-red-600"
+              >
+                Remove
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </div>
+      <div className="flex flex-col flex-1 min-w-0">
+        <Link href={`/marketplace/${item.id}`}>
+          <CardContent className="p-4 flex-1">
+            <div className="space-y-1">
+              <h3 className="font-medium truncate">{item.title}</h3>
+              <p className="text-sm text-muted-foreground line-clamp-2">
+                {item.description}
+              </p>
+            </div>
+            <div className="mt-2 flex items-center justify-between">
+              <div className="flex items-center text-sm">
+                <MapPin className="mr-1 h-3 w-3 text-muted-foreground" />
+                <span className="text-muted-foreground">
+                  {item.distance} miles
+                </span>
+              </div>
+              <div className="flex items-center">
+                <Star className="h-4 w-4 fill-amber-500 text-amber-500" />
+                <span className="ml-1 text-sm font-medium">{item.rating}</span>
+                <span className="ml-1 text-xs text-muted-foreground">
+                  ({item.reviews})
+                </span>
+              </div>
+            </div>
+            <div className="mt-2 text-xs text-muted-foreground">
+              Saved on {formatDate(item.savedDate)}
+            </div>
+          </CardContent>
+        </Link>
+        <CardFooter className="p-4 pt-0 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Avatar className="h-6 w-6">
+              <AvatarImage
+                src={item.owner.avatar || "/placeholder.svg"}
+                alt={item.owner.name}
+              />
+              <AvatarFallback>{item.owner.name.charAt(0)}</AvatarFallback>
+            </Avatar>
+            <span className="text-xs text-muted-foreground">
+              {item.owner.name}
+            </span>
+          </div>
+          <div className="flex items-center gap-1">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                // Navigate to messages
+              }}
+            >
+              <MessageCircle className="h-3 w-3 mr-1" />
+              Message
+            </Button>
+            <Button
+              size="sm"
+              className="bg-gradient-to-r from-teal-500 to-cyan-600 hover:from-teal-600 hover:to-cyan-700"
+              disabled={!item.available}
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                if (item.available) {
+                  window.location.href = `/marketplace/${item.id}?rent=true`;
+                }
+              }}
+            >
+              {item.available ? "Rent Now" : "Unavailable"}
+            </Button>
+          </div>
+        </CardFooter>
+      </div>
+    </Card>
+  );
+}
 
 export default function SavedItemsPage() {
-  const [searchQuery, setSearchQuery] = useState("")
-  const [activeCategory, setActiveCategory] = useState("all")
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
-  const [items, setItems] = useState(savedItems)
+  const [searchQuery, setSearchQuery] = useState("");
+  const [activeCategory, setActiveCategory] = useState("all");
+  const [items, setItems] = useState(savedItems);
 
   // Filter items based on search query and active category
   const filteredItems = items.filter((item) => {
     const matchesSearch =
       item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.description.toLowerCase().includes(searchQuery.toLowerCase())
-    const matchesCategory = activeCategory === "all" || item.category === activeCategory
-    return matchesSearch && matchesCategory
-  })
+      item.description.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory =
+      activeCategory === "all" || item.category === activeCategory;
+    return matchesSearch && matchesCategory;
+  });
 
   const removeFromSaved = (itemId: number) => {
-    setItems(items.filter((item) => item.id !== itemId))
-  }
+    setItems(items.filter((item) => item.id !== itemId));
+  };
 
   const formatDate = (dateString: string) => {
-    const date = new Date(dateString)
-    return date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
-  }
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
+  };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 mx-auto max-w-7xl w-full px-2 sm:px-4">
       {/* Header */}
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      <div className="flex gap-4 flex-row items-center justify-between w-full">
         <div>
           <h1 className="text-2xl font-bold">Saved Items</h1>
           <p className="text-muted-foreground">Items you've saved for later</p>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-sm text-muted-foreground">{filteredItems.length} items</span>
-          <div className="border rounded-md p-1">
-            <Button
-              variant={viewMode === "grid" ? "default" : "ghost"}
-              size="icon"
-              className="h-8 w-8"
-              onClick={() => setViewMode("grid")}
-            >
-              <Grid className="h-4 w-4" />
-              <span className="sr-only">Grid view</span>
-            </Button>
-            <Button
-              variant={viewMode === "list" ? "default" : "ghost"}
-              size="icon"
-              className="h-8 w-8"
-              onClick={() => setViewMode("list")}
-            >
-              <List className="h-4 w-4" />
-              <span className="sr-only">List view</span>
-            </Button>
-          </div>
+          <span className="text-sm text-muted-foreground">
+            {filteredItems.length} items
+          </span>
         </div>
       </div>
 
       {/* Search and Filters */}
-      <div className="flex flex-col gap-4 md:flex-row md:items-center">
-        <div className="relative flex-1 max-w-md">
+      <div className="flex gap-4 items-center w-full">
+        <div className="relative flex-1">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             type="search"
@@ -244,8 +386,12 @@ export default function SavedItemsPage() {
       </div>
 
       {/* Categories */}
-      <div className="overflow-x-auto pb-2">
-        <Tabs defaultValue="all" value={activeCategory} onValueChange={setActiveCategory}>
+      <div className="overflow-x-auto pb-2 max-w-[90vw] md:max-w-full">
+        <Tabs
+          defaultValue="all"
+          value={activeCategory}
+          onValueChange={setActiveCategory}
+        >
           <TabsList className="h-auto p-1 bg-transparent">
             {categories.map((category) => (
               <TabsTrigger
@@ -279,120 +425,17 @@ export default function SavedItemsPage() {
           </Link>
         </div>
       ) : (
-        <div className={viewMode === "grid" ? "grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" : "space-y-4"}>
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 w-full max-w-full">
           {filteredItems.map((item) => (
-            <Card key={item.id} className={`overflow-hidden group ${viewMode === "list" ? "flex" : ""}`}>
-              <div className={`relative ${viewMode === "list" ? "w-48 flex-shrink-0" : ""}`}>
-                <Link href={`/marketplace/${item.id}`}>
-                  <Image
-                    src={item.image || "/placeholder.svg"}
-                    alt={item.title}
-                    width={400}
-                    height={300}
-                    className={`object-cover ${viewMode === "list" ? "h-full w-full" : "h-48 w-full"}`}
-                  />
-                  <Badge className="absolute bottom-2 left-2 bg-black/50 hover:bg-black/60 text-white">
-                    ${item.price}/{item.priceUnit}
-                  </Badge>
-                </Link>
-                {!item.available && (
-                  <Badge variant="destructive" className="absolute top-2 left-2">
-                    Unavailable
-                  </Badge>
-                )}
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="absolute top-2 right-2 h-8 w-8 rounded-full bg-red-100 text-red-500 hover:bg-red-200 hover:text-red-600 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/30"
-                    >
-                      <Heart className="h-4 w-4 fill-current" />
-                      <span className="sr-only">Remove from saved</span>
-                    </Button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>Remove from saved items?</AlertDialogTitle>
-                      <AlertDialogDescription>
-                        This will remove "{item.title}" from your saved items. You can always save it again later.
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <AlertDialogAction
-                        onClick={() => removeFromSaved(item.id)}
-                        className="bg-red-500 hover:bg-red-600"
-                      >
-                        Remove
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
-              </div>
-              <div className={`flex flex-col ${viewMode === "list" ? "flex-1" : ""}`}>
-                <Link href={`/marketplace/${item.id}`}>
-                  <CardContent className="p-4 flex-1">
-                    <div className="space-y-1">
-                      <h3 className="font-medium truncate">{item.title}</h3>
-                      <p className="text-sm text-muted-foreground line-clamp-2">{item.description}</p>
-                    </div>
-                    <div className="mt-2 flex items-center justify-between">
-                      <div className="flex items-center text-sm">
-                        <MapPin className="mr-1 h-3 w-3 text-muted-foreground" />
-                        <span className="text-muted-foreground">{item.distance} miles</span>
-                      </div>
-                      <div className="flex items-center">
-                        <Star className="h-4 w-4 fill-amber-500 text-amber-500" />
-                        <span className="ml-1 text-sm font-medium">{item.rating}</span>
-                        <span className="ml-1 text-xs text-muted-foreground">({item.reviews})</span>
-                      </div>
-                    </div>
-                    <div className="mt-2 text-xs text-muted-foreground">Saved on {formatDate(item.savedDate)}</div>
-                  </CardContent>
-                </Link>
-                <CardFooter className="p-4 pt-0 flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Avatar className="h-6 w-6">
-                      <AvatarImage src={item.owner.avatar || "/placeholder.svg"} alt={item.owner.name} />
-                      <AvatarFallback>{item.owner.name.charAt(0)}</AvatarFallback>
-                    </Avatar>
-                    <span className="text-xs text-muted-foreground">{item.owner.name}</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        e.preventDefault()
-                        // Navigate to messages
-                      }}
-                    >
-                      <MessageCircle className="h-3 w-3 mr-1" />
-                      Message
-                    </Button>
-                    <Button
-                      size="sm"
-                      className="bg-gradient-to-r from-teal-500 to-cyan-600 hover:from-teal-600 hover:to-cyan-700"
-                      disabled={!item.available}
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        e.preventDefault()
-                        if (item.available) {
-                          window.location.href = `/marketplace/${item.id}?rent=true`
-                        }
-                      }}
-                    >
-                      {item.available ? "Rent Now" : "Unavailable"}
-                    </Button>
-                  </div>
-                </CardFooter>
-              </div>
-            </Card>
+            <SavedItemCard
+              key={item.id}
+              item={item}
+              removeFromSaved={removeFromSaved}
+              formatDate={formatDate}
+            />
           ))}
         </div>
       )}
     </div>
-  )
+  );
 }

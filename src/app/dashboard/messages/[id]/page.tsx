@@ -9,6 +9,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Send, MoreVertical, Phone, Video } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { usePixabayImage } from "@/hooks/use-pixabay-image";
+import Image from "next/image";
 
 interface Message {
   id: string;
@@ -97,6 +99,20 @@ const getConversation = (id: string): Conversation => ({
   ],
 });
 
+// Child component for rental item image with Pixabay hook
+function ChatItemImage({ name, fallback }: { name: string; fallback: string }) {
+  const imageUrl = usePixabayImage(name, fallback);
+  return (
+    <Image
+      src={imageUrl}
+      alt={name}
+      width={64}
+      height={64}
+      className="w-16 h-16 rounded-lg object-cover"
+    />
+  );
+}
+
 export default function ChatPage({ params }: { params: { id: string } }) {
   const router = useRouter();
   const [newMessage, setNewMessage] = useState("");
@@ -175,10 +191,9 @@ export default function ChatPage({ params }: { params: { id: string } }) {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-4">
-              <img
-                src={conversation.item.image || "/placeholder.svg"}
-                alt={conversation.item.name}
-                className="w-16 h-16 rounded-lg object-cover"
+              <ChatItemImage
+                name={conversation.item.name}
+                fallback={conversation.item.image || "/placeholder.svg"}
               />
               <div className="flex-1">
                 <h4 className="font-medium">{conversation.item.name}</h4>

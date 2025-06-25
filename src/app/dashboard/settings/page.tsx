@@ -165,12 +165,30 @@ export default function SettingsPage() {
         </p>
       </div>
 
+      {/* Mobile: Dropdown for tabs */}
+      <div className="block md:hidden mb-4">
+        <Select value={activeTab} onValueChange={setActiveTab}>
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Select section" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="profile">Profile</SelectItem>
+            <SelectItem value="account">Account</SelectItem>
+            <SelectItem value="notifications">Notifications</SelectItem>
+            <SelectItem value="privacy">Privacy</SelectItem>
+            <SelectItem value="payments">Payments</SelectItem>
+            <SelectItem value="preferences">Preferences</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
       <Tabs
         value={activeTab}
         onValueChange={setActiveTab}
         className="space-y-6"
       >
-        <TabsList className="grid w-full grid-cols-6">
+        {/* Desktop: TabsList */}
+        <TabsList className="hidden md:grid w-full grid-cols-6">
           <TabsTrigger value="profile" className="flex items-center gap-2">
             <User className="h-4 w-4" />
             Profile

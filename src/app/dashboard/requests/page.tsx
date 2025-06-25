@@ -1,13 +1,24 @@
-"use client"
+"use client";
 
-import Image from "next/image"
-import { Search, Filter, Clock, Calendar, User, MapPin, Star, Check, X, MessageSquare } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
-import { Card, CardContent } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import Image from "next/image";
+import {
+  Search,
+  Filter,
+  Clock,
+  Calendar,
+  User,
+  MapPin,
+  Star,
+  Check,
+  X,
+  MessageSquare,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,8 +26,14 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+} from "@/components/ui/dropdown-menu";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -27,7 +44,20 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
+} from "@/components/ui/alert-dialog";
+import { usePixabayImage } from "@/hooks/use-pixabay-image";
+
+// Child component for request item image with Pixabay hook
+function RequestItemImage({
+  title,
+  fallback,
+}: {
+  title: string;
+  fallback: string;
+}) {
+  const imageUrl = usePixabayImage(title, fallback);
+  return <Image src={imageUrl} alt={title} fill className="object-cover" />;
+}
 
 export default function RequestsPage() {
   // Sample incoming requests data (people wanting to rent your items)
@@ -73,7 +103,8 @@ export default function RequestsPage() {
       endDate: "May 24, 2023",
       duration: 2,
       totalPrice: 100,
-      message: "I need this for a wedding photography gig. I'm a professional photographer with insurance coverage.",
+      message:
+        "I need this for a wedding photography gig. I'm a professional photographer with insurance coverage.",
       requestedAt: "5 hours ago",
       status: "pending",
     },
@@ -95,11 +126,12 @@ export default function RequestsPage() {
       endDate: "May 21, 2023",
       duration: 1,
       totalPrice: 15,
-      message: "Quick home repair project. Will pick up and return same day if possible.",
+      message:
+        "Quick home repair project. Will pick up and return same day if possible.",
       requestedAt: "1 day ago",
       status: "pending",
     },
-  ]
+  ];
 
   // Sample outgoing requests data (your requests to rent others' items)
   const outgoingRequests = [
@@ -121,7 +153,8 @@ export default function RequestsPage() {
       endDate: "June 4, 2023",
       duration: 3,
       totalPrice: 75,
-      message: "Planning a family camping trip. We're experienced campers and will take excellent care of your tent.",
+      message:
+        "Planning a family camping trip. We're experienced campers and will take excellent care of your tent.",
       requestedAt: "3 hours ago",
       status: "pending",
     },
@@ -143,7 +176,8 @@ export default function RequestsPage() {
       endDate: "May 27, 2023",
       duration: 1,
       totalPrice: 30,
-      message: "Need this for a business presentation. Will handle with care and return promptly.",
+      message:
+        "Need this for a business presentation. Will handle with care and return promptly.",
       requestedAt: "Yesterday",
       status: "approved",
     },
@@ -165,11 +199,12 @@ export default function RequestsPage() {
       endDate: "May 20, 2023",
       duration: 2,
       totalPrice: 50,
-      message: "Would love to try this for my daily commute. I'm a responsible rider with a clean record.",
+      message:
+        "Would love to try this for my daily commute. I'm a responsible rider with a clean record.",
       requestedAt: "2 days ago",
       status: "declined",
     },
-  ]
+  ];
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -178,44 +213,46 @@ export default function RequestsPage() {
           <Badge className="bg-amber-100 text-amber-800 hover:bg-amber-200 dark:bg-amber-900/20 dark:text-amber-400">
             Pending
           </Badge>
-        )
+        );
       case "approved":
         return (
           <Badge className="bg-green-100 text-green-800 hover:bg-green-200 dark:bg-green-900/20 dark:text-green-400">
             Approved
           </Badge>
-        )
+        );
       case "declined":
         return (
           <Badge className="bg-red-100 text-red-800 hover:bg-red-200 dark:bg-red-900/20 dark:text-red-400">
             Declined
           </Badge>
-        )
+        );
       default:
-        return <Badge variant="outline">{status}</Badge>
+        return <Badge variant="outline">{status}</Badge>;
     }
-  }
+  };
 
   const handleAcceptRequest = (requestId: number) => {
-    console.log("Accepting request:", requestId)
+    console.log("Accepting request:", requestId);
     // Handle accept logic here
-  }
+  };
 
   const handleDeclineRequest = (requestId: number) => {
-    console.log("Declining request:", requestId)
+    console.log("Declining request:", requestId);
     // Handle decline logic here
-  }
+  };
 
   const handleCancelRequest = (requestId: number) => {
-    console.log("Canceling request:", requestId)
+    console.log("Canceling request:", requestId);
     // Handle cancel logic here
-  }
+  };
 
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-2">
         <h1 className="text-3xl font-bold tracking-tight">Rental Requests</h1>
-        <p className="text-muted-foreground">Manage incoming and outgoing rental requests</p>
+        <p className="text-muted-foreground">
+          Manage incoming and outgoing rental requests
+        </p>
       </div>
 
       {/* Filters and actions */}
@@ -223,7 +260,11 @@ export default function RequestsPage() {
         <div className="flex flex-1 items-center gap-2">
           <div className="relative flex-1 max-w-sm">
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input type="search" placeholder="Search requests..." className="pl-8" />
+            <Input
+              type="search"
+              placeholder="Search requests..."
+              className="pl-8"
+            />
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -291,7 +332,8 @@ export default function RequestsPage() {
               </div>
               <h3 className="text-lg font-medium">No Incoming Requests</h3>
               <p className="text-muted-foreground mt-1 mb-4 max-w-md">
-                When people want to rent your items, their requests will appear here.
+                When people want to rent your items, their requests will appear
+                here.
               </p>
             </div>
           ) : (
@@ -303,23 +345,26 @@ export default function RequestsPage() {
                     <div className="flex items-start justify-between">
                       <div className="flex items-center gap-4">
                         <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-lg">
-                          <Image
-                            src={request.item.image || "/placeholder.svg"}
-                            alt={request.item.title}
-                            fill
-                            className="object-cover"
+                          <RequestItemImage
+                            title={request.item.title}
+                            fallback={request.item.image || "/placeholder.svg"}
                           />
                         </div>
                         <div>
-                          <h3 className="font-semibold text-lg">{request.item.title}</h3>
+                          <h3 className="font-semibold text-lg">
+                            {request.item.title}
+                          </h3>
                           <p className="text-sm text-muted-foreground">
-                            ${request.item.pricePerDay}/day • {request.duration} days
+                            ${request.item.pricePerDay}/day • {request.duration}{" "}
+                            days
                           </p>
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
                         {getStatusBadge(request.status)}
-                        <p className="text-xs text-muted-foreground">{request.requestedAt}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {request.requestedAt}
+                        </p>
                       </div>
                     </div>
 
@@ -339,17 +384,22 @@ export default function RequestsPage() {
                       </Avatar>
                       <div className="flex-1">
                         <div className="flex items-center gap-2">
-                          <p className="font-medium">{request.requester.name}</p>
+                          <p className="font-medium">
+                            {request.requester.name}
+                          </p>
                           <div className="flex items-center gap-1">
                             <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
                             <span className="text-sm text-muted-foreground">
-                              {request.requester.rating} ({request.requester.reviewCount})
+                              {request.requester.rating} (
+                              {request.requester.reviewCount})
                             </span>
                           </div>
                         </div>
                         <div className="flex items-center gap-1 mt-1">
                           <MapPin className="h-3 w-3 text-muted-foreground" />
-                          <p className="text-xs text-muted-foreground">{request.requester.location}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {request.requester.location}
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -369,14 +419,16 @@ export default function RequestsPage() {
                         <Clock className="h-4 w-4 text-teal-600" />
                         <div>
                           <p className="text-sm font-medium">Duration</p>
-                          <p className="text-xs text-muted-foreground">{request.duration} days</p>
+                          <p className="text-xs text-muted-foreground">
+                            {request.duration} days
+                          </p>
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
                         <User className="h-4 w-4 text-teal-600" />
                         <div>
                           <p className="text-sm font-medium">Total Price</p>
-                          <p className="text-xs text-muted-foreground font-semibold text-teal-600">
+                          <p className="text-xs font-semibold text-teal-600">
                             ${request.totalPrice.toFixed(2)}
                           </p>
                         </div>
@@ -385,8 +437,12 @@ export default function RequestsPage() {
 
                     {/* Message */}
                     <div className="p-4 bg-blue-50 dark:bg-blue-950/20 rounded-lg">
-                      <p className="text-sm font-medium mb-2">Message from {request.requester.name.split(" ")[0]}:</p>
-                      <p className="text-sm text-muted-foreground italic">"{request.message}"</p>
+                      <p className="text-sm font-medium mb-2">
+                        Message from {request.requester.name.split(" ")[0]}:
+                      </p>
+                      <p className="text-sm text-muted-foreground italic">
+                        &quot;{request.message}&quot;
+                      </p>
                     </div>
 
                     {/* Actions */}
@@ -408,14 +464,19 @@ export default function RequestsPage() {
                           </AlertDialogTrigger>
                           <AlertDialogContent>
                             <AlertDialogHeader>
-                              <AlertDialogTitle>Decline Request</AlertDialogTitle>
+                              <AlertDialogTitle>
+                                Decline Request
+                              </AlertDialogTitle>
                               <AlertDialogDescription>
-                                Are you sure you want to decline this rental request? This action cannot be undone.
+                                Are you sure you want to decline this rental
+                                request? This action cannot be undone.
                               </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
                               <AlertDialogCancel>Cancel</AlertDialogCancel>
-                              <AlertDialogAction onClick={() => handleDeclineRequest(request.id)}>
+                              <AlertDialogAction
+                                onClick={() => handleDeclineRequest(request.id)}
+                              >
                                 Decline Request
                               </AlertDialogAction>
                             </AlertDialogFooter>
@@ -457,30 +518,36 @@ export default function RequestsPage() {
                     <div className="flex items-start justify-between">
                       <div className="flex items-center gap-4">
                         <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-lg">
-                          <Image
-                            src={request.item.image || "/placeholder.svg"}
-                            alt={request.item.title}
-                            fill
-                            className="object-cover"
+                          <RequestItemImage
+                            title={request.item.title}
+                            fallback={request.item.image || "/placeholder.svg"}
                           />
                         </div>
                         <div>
-                          <h3 className="font-semibold text-lg">{request.item.title}</h3>
+                          <h3 className="font-semibold text-lg">
+                            {request.item.title}
+                          </h3>
                           <p className="text-sm text-muted-foreground">
-                            ${request.item.pricePerDay}/day • {request.duration} days
+                            ${request.item.pricePerDay}/day • {request.duration}{" "}
+                            days
                           </p>
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
                         {getStatusBadge(request.status)}
-                        <p className="text-xs text-muted-foreground">{request.requestedAt}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {request.requestedAt}
+                        </p>
                       </div>
                     </div>
 
                     {/* Owner info */}
                     <div className="flex items-center gap-4 p-4 bg-muted/30 rounded-lg">
                       <Avatar className="h-12 w-12">
-                        <AvatarImage src={request.owner.avatar || "/placeholder.svg"} alt={request.owner.name} />
+                        <AvatarImage
+                          src={request.owner.avatar || "/placeholder.svg"}
+                          alt={request.owner.name}
+                        />
                         <AvatarFallback>
                           {request.owner.name
                             .split(" ")
@@ -494,13 +561,16 @@ export default function RequestsPage() {
                           <div className="flex items-center gap-1">
                             <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
                             <span className="text-sm text-muted-foreground">
-                              {request.owner.rating} ({request.owner.reviewCount})
+                              {request.owner.rating} (
+                              {request.owner.reviewCount})
                             </span>
                           </div>
                         </div>
                         <div className="flex items-center gap-1 mt-1">
                           <MapPin className="h-3 w-3 text-muted-foreground" />
-                          <p className="text-xs text-muted-foreground">{request.owner.location}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {request.owner.location}
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -520,14 +590,16 @@ export default function RequestsPage() {
                         <Clock className="h-4 w-4 text-teal-600" />
                         <div>
                           <p className="text-sm font-medium">Duration</p>
-                          <p className="text-xs text-muted-foreground">{request.duration} days</p>
+                          <p className="text-xs text-muted-foreground">
+                            {request.duration} days
+                          </p>
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
                         <User className="h-4 w-4 text-teal-600" />
                         <div>
                           <p className="text-sm font-medium">Total Price</p>
-                          <p className="text-xs text-muted-foreground font-semibold text-teal-600">
+                          <p className="text-xs font-semibold text-teal-600">
                             ${request.totalPrice.toFixed(2)}
                           </p>
                         </div>
@@ -537,7 +609,9 @@ export default function RequestsPage() {
                     {/* Your message */}
                     <div className="p-4 bg-teal-50 dark:bg-teal-950/20 rounded-lg">
                       <p className="text-sm font-medium mb-2">Your message:</p>
-                      <p className="text-sm text-muted-foreground italic">"{request.message}"</p>
+                      <p className="text-sm text-muted-foreground italic">
+                        &quot;{request.message}&quot;
+                      </p>
                     </div>
 
                     {/* Actions */}
@@ -552,14 +626,21 @@ export default function RequestsPage() {
                           </AlertDialogTrigger>
                           <AlertDialogContent>
                             <AlertDialogHeader>
-                              <AlertDialogTitle>Cancel Request</AlertDialogTitle>
+                              <AlertDialogTitle>
+                                Cancel Request
+                              </AlertDialogTitle>
                               <AlertDialogDescription>
-                                Are you sure you want to cancel this rental request? This action cannot be undone.
+                                Are you sure you want to cancel this rental
+                                request? This action cannot be undone.
                               </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
-                              <AlertDialogCancel>Keep Request</AlertDialogCancel>
-                              <AlertDialogAction onClick={() => handleCancelRequest(request.id)}>
+                              <AlertDialogCancel>
+                                Keep Request
+                              </AlertDialogCancel>
+                              <AlertDialogAction
+                                onClick={() => handleCancelRequest(request.id)}
+                              >
                                 Cancel Request
                               </AlertDialogAction>
                             </AlertDialogFooter>
@@ -585,5 +666,5 @@ export default function RequestsPage() {
         </TabsContent>
       </Tabs>
     </div>
-  )
+  );
 }
